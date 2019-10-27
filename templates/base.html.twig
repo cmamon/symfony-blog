@@ -1,12 +1,16 @@
+{# templates/base.html.twig #}
+
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="content-type" content="text/html" charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        <header>{% block header %}{% endblock %}</header>
         {% block body %}{% endblock %}
+        <footer>{% block footer %}{% endblock %}</footer>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
