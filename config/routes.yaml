@@ -2,6 +2,14 @@ index:
     path: /
     controller: App\Controller\BlogController::index
 
-post_id:
+post:
+    path: /post
+    controller: App\Controller\PostController::index
+
+post_create:
+    path: /post/new
+    controller: App\Controller\PostController::createPost
+
+post_show:
     path: /post/{id}
-    controller: App\Controller\BlogController::postDetail
+    controller: App\Controller\PostController::showPost
