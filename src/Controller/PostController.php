@@ -1,8 +1,10 @@
 <?php
+// src/Controller/PostController.php
 
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Utils\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +17,16 @@ class PostController extends AbstractController
      */
     public function index()
     {
+        $posts = $this->getDoctrine()
+        ->getRepository(Post::class)
+        ->findAll();
+
+        if (!$posts) {
+            return new Response('No post to show.');
+        }
+        
         return $this->render('post/index.html.twig', [
-            'controller_name' => 'PostController',
+            'posts' => $posts,
         ]);
     }
 
@@ -29,10 +39,13 @@ class PostController extends AbstractController
         // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
         $entityManager = $this->getDoctrine()->getManager();
 
+        $slugger = new Slugger();
+
         $post = new Post();
         $post->setName('Keyboard');
         $post->setPublicationDate(new \DateTime());
         $post->setContent('Ergonomic and stylish!');
+        $post->setSlug($slugger->slugify($post->getName()));
 
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($post);
@@ -61,8 +74,9 @@ class PostController extends AbstractController
         return $this->render('post/show.html.twig', [
             'id' => $id,
             'post_name' => $post->getName(),
+            'post_slug' => $post->getSlug(),
             'post_pub_date' => $post->getPublicationDate()->format('d-m-Y H:i:s'),
-            'post_content' => $post->getContent(),
+            'post_content' => $post->getContent()
         ]);
     }
 }
