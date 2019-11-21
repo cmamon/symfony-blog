@@ -10,6 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Controller for posts.
+ */
 class PostController extends AbstractController
 {
     /**
@@ -24,7 +27,7 @@ class PostController extends AbstractController
         if (!$posts) {
             return new Response('No post to show.');
         }
-        
+
         return $this->render('post/index.html.twig', [
             'posts' => $posts,
         ]);
@@ -57,8 +60,8 @@ class PostController extends AbstractController
     }
 
     /**
-      * @Route("/post/{id}", name="post_show")
-      */
+     * @Route("/post/{id}", name="post_show")
+     */
     public function showPost($id)
     {
         $post = $this->getDoctrine()
