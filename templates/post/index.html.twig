@@ -3,13 +3,29 @@
 {% block title %}Post list{% endblock %}
 
 {% block body %}
-    {% for post in posts %}
-    [<br>
-        &emsp;<b>{{ post.name }}</b> <br>
-        &emsp;{{ post.slug }} <br>
-        &emsp;{{ post.publicationDate.format('d-m-Y H:i:s') }} <br>
-        &emsp;{{ post.content }} <br>
-    ]<br>
-    <br>
-    {% endfor %}
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Post list</h1>
+
+      {% for post in posts %}
+      <article class="message">
+        <div class="message-header">
+          <p>{{ post.name }}</p>
+        </div>
+        <div class="message-body">
+          <em>{{ post.publicationDate.format('H:i \o\n l jS F Y') }} </em><br>
+          {{ post.content }}
+        <br><br>
+        <div class="field is-grouped">
+          <p class="control">
+            <a class="button is-dark" href="{{ path('post_show', {'id': post.id}) }}">
+              View article >>
+            </a>
+          </p>
+        </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
 {% endblock %}

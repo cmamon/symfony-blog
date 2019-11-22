@@ -5,11 +5,23 @@
 
 {% block title %}Blog{% endblock %}
 
-{% block body %}<h1>Post {{ id }}</h1>
-<ul>
-    <li><h3>Name : {{post_name}}</h3></li>
-    <li><h3>Slug : {{post_slug}}</h3></li>
-    <li><h3>Publication date : {{post_pub_date}}</h3> </li>
-    <li><h3>Content : {{post_content}}</h3></li>
-</ul>
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Post {{ id }}</h1>
+
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <div class="tile is-child box">
+            <p class="title">{{post_name}}</p>
+            <ul>
+                <li>Slug : {{post_slug}}</li>
+                <li>Publication date : {{post_pub_date}} </li>
+                <li>Content : {{post_content}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
