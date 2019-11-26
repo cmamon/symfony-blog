@@ -5,20 +5,33 @@
 {% block body %}
   <section class="section">
     <div class="container">
+      <h1 class="title">Welcome on our wonderful blog</h1>
+
+      <p class="subtitle">
+        Our blog uses <strong>Bulma</strong>!
+      </p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
       <h1 class="title">Post list</h1>
 
       {% for post in posts %}
-      <article class="message">
+      {% if loop.index0 == 0 %}
+        <article class="message is-success">
+      {% else %}
+        <article class="message">
+      {% endif %}
         <div class="message-header">
-          <p>{{ post.name }}</p>
+          <p>{{ posts[loop.revindex0].name }}</p>
         </div>
         <div class="message-body">
-          <em>{{ post.publicationDate.format('H:i \o\n l jS F Y') }} </em><br>
-          {{ post.content }}
+          <em>{{ posts[loop.revindex0].publicationDate.format('H:i \o\n l jS F Y') }} </em><br>
+          {{ posts[loop.revindex0].content }}
         <br><br>
         <div class="field is-grouped">
           <p class="control">
-            <a class="button is-dark" href="{{ path('post_show', {'id': post.id}) }}">
+            <a class="button is-dark" href="{{ path('post_show', {'id': posts[loop.revindex0].id}) }}">
               View article >>
             </a>
           </p>

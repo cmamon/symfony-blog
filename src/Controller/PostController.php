@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostController extends AbstractController
 {
     /**
-     * @Route("/post", name="post")
+     * @Route("/", name="post")
      */
     public function index()
     {
@@ -45,9 +45,7 @@ class PostController extends AbstractController
         ->findAll();
 
         if (!$posts) {
-            throw $this->createNotFoundException(
-                'No post to delete '
-            );
+          return new Response('No post to delete');
         }
 
         foreach ($posts as $key => $post) {
@@ -86,8 +84,8 @@ class PostController extends AbstractController
           ->getRepository(Post::class)
           ->findAll();
 
-        return $this->render('post/create.html.twig', [
-            'id' => $post->getId(),
+        return $this->render('post/index.html.twig', [
+            'posts' => $posts,
         ]);
     }
 
