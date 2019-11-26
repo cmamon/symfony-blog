@@ -36,7 +36,7 @@ class PostController extends AbstractController
     /**
      * @Route("/post/new", name="post_create")
      */
-    public function createPost(): Response
+    public function createPost()
     {
         // you can fetch the EntityManager via $this->getDoctrine()
         // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
@@ -56,7 +56,51 @@ class PostController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new product with id '.$post->getId());
+        return $this->render('post/create.html.twig', [
+            'id' => $post->getId(),
+        ]);
+    }
+
+    /**
+     * @Route("/post/delete/{id}", name="post_delete")
+     */
+    public function deletePost($id): Response
+    {
+        $post = $this->getDoctrine()
+            ->getRepository(Post::class)
+            ->find($id);
+
+        if (!$post) {
+            throw $this->createNotFoundException(
+                'No post found for id '.$id
+            );
+        }
+
+        $entityManager->remove($post);
+        $entityManager->flush();
+
+        return new Response('Deleted product with id '.$post->getId());
+    }
+
+    /**
+     * @Route("/post/edit/{id}", name="post_edit")
+     */
+    public function editPost($id): Response
+    {
+        $post = $this->getDoctrine()
+            ->getRepository(Post::class)
+            ->find($id);
+
+        if (!$post) {
+            throw $this->createNotFoundException(
+                'No post found for id '.$id
+            );
+        }
+
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        return new Response('Deleted product with id '.$post->getId());
     }
 
     /**
