@@ -34,6 +34,32 @@ class PostController extends AbstractController
     }
 
     /**
+     * @Route("/post/delete", name="post_delete_all")
+     */
+    public function deleteAllPost()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $posts = $this->getDoctrine()
+        ->getRepository(Post::class)
+        ->findAll();
+
+        if (!$posts) {
+            throw $this->createNotFoundException(
+                'No post to delete '
+            );
+        }
+
+        foreach ($posts as $key => $post) {
+          $entityManager->remove($post);
+        }
+
+        $entityManager->flush();
+
+        return new Response('Deleted all product ');
+    }
+
+    /**
      * @Route("/post/new", name="post_create")
      */
     public function createPost()
@@ -56,6 +82,10 @@ class PostController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
+        $posts = $this->getDoctrine()
+          ->getRepository(Post::class)
+          ->findAll();
+
         return $this->render('post/create.html.twig', [
             'id' => $post->getId(),
         ]);
@@ -66,6 +96,8 @@ class PostController extends AbstractController
      */
     public function deletePost($id): Response
     {
+        $entityManager = $this->getDoctrine()->getManager();
+
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
             ->find($id);
