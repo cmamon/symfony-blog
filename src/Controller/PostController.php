@@ -90,6 +90,14 @@ class PostController extends AbstractController
     }
 
     /**
+     * @Route("/post/new", name="post_create")
+     */
+    public function showForm()
+    {
+        return $this->render('post/create.html.twig');
+    }
+
+    /**
      * @Route("/post/delete/{id}", name="post_delete")
      */
     public function deletePost($id): Response

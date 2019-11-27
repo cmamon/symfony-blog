@@ -3,9 +3,9 @@ post:
     path: /
     controller: App\Controller\PostController::index
 
-post_create:
+form_create:
     path: /post/new
-    controller: App\Controller\PostController::createPost
+    controller: App\Controller\PostController::showForm
 
 post_delete_all:
   path : /post/delete
