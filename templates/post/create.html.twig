@@ -9,7 +9,7 @@
 
 <h1 class="title">New Post</h1>
 
-{{ form_start(form) }}
+{{ form_start(form)  }}
 <section class="form">
   <div class="field">
     <label class="label">Username</label>
@@ -34,9 +34,7 @@
 
   <div class="field is-grouped">
     <div class="control">
-      <a class="button is-link" href="{{ path('post_create') }}">
-        Submit
-      </a>
+      {{ form_row(form.submit, { 'label': 'Submit me', 'attr': {'class': 'button is-link'}}) }}
     </div>
     <div class="control">
       <a class="button is-link is-light" href="{{ path('post') }}">

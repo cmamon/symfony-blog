@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controller for posts.
@@ -62,32 +64,7 @@ class PostController extends AbstractController
     /**
      * @Route("/post/new", name="post_create")
      */
-    public function createPost()
-    {
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $slugger = new Slugger();
-
-        $post = new Post();
-        $post->setPublicationDate(new \DateTime());
-
-        $form = $this->createFormBuilder($post)
-          ->add('name',       TextType::class)
-          ->add('content',    TextareaType::class)
-          ->add('slug',     TextType::class)
-          ->getForm();
-
-        return $this->render('post/index.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/post/new", name="post_create")
-     */
-    public function showForm()
+    public function showForm(Request $request)
     {
       $slugger = new Slugger();
 
@@ -98,8 +75,21 @@ class PostController extends AbstractController
       $form = $this->createFormBuilder($post)
         ->add('name',       TextType::class)
         ->add('content',    TextareaType::class)
-        ->add('slug',     TextType::class)
+        ->add('slug',       TextType::class)
+        ->add('submit',       SubmitType::class)
         ->getForm();
+
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+
+          $post = $form->getData();
+
+          $entityManager = $this->getDoctrine()->getManager();
+          $entityManager->persist($post);
+          $entityManager->flush();
+
+          return $this->redirectToRoute('post');
+      }
 
       return $this->render('post/create.html.twig', [
           'form' => $form->createView(),

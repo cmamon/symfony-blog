@@ -14,7 +14,8 @@ class BlogController extends AbstractController
 {
 
 }
-/*<section class="form">
+/*
+<section class="form">
   <div class="field">
     <label class="label">Username</label>
     <div class="control">
@@ -48,4 +49,5 @@ class BlogController extends AbstractController
       </a>
     </div>
   </div>
-</section>*/
+</section>
+*/
