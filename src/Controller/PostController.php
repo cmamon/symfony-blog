@@ -28,10 +28,6 @@ class PostController extends AbstractController
         ->getRepository(Post::class)
         ->findAll();
 
-        if (!$posts) {
-            return new Response('No post to show.');
-        }
-
         return $this->render('post/index.html.twig', [
             'posts' => $posts,
         ]);
@@ -66,32 +62,31 @@ class PostController extends AbstractController
      */
     public function showForm(Request $request)
     {
-      $slugger = new Slugger();
+        $slugger = new Slugger();
 
-      $post = new Post();
-      $post->setPublicationDate(new \DateTime());
+        $post = new Post();
+        $post->setPublicationDate(new \DateTime());
 
 
-      $form = $this->createFormBuilder($post)
-        ->add('name',       TextType::class)
-        ->add('content',    TextareaType::class)
-        ->add('slug',       TextType::class)
-        ->add('submit',       SubmitType::class)
+        $form = $this->createFormBuilder($post)
+        ->add('name', TextType::class)
+        ->add('content', TextareaType::class)
+        ->add('slug', TextType::class)
+        ->add('submit', SubmitType::class)
         ->getForm();
 
-      $form->handleRequest($request);
-      if ($form->isSubmitted() && $form->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
 
-          $post = $form->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($post);
+            $entityManager->flush();
 
-          $entityManager = $this->getDoctrine()->getManager();
-          $entityManager->persist($post);
-          $entityManager->flush();
+            return $this->redirectToRoute('post');
+        }
 
-          return $this->redirectToRoute('post');
-      }
-
-      return $this->render('post/create.html.twig', [
+        return $this->render('post/create.html.twig', [
           'form' => $form->createView(),
       ]);
     }
