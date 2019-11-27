@@ -12,11 +12,5 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class BlogController extends AbstractController
 {
-    /**
-     * @Route("/", name="index")
-     */
-    public function index()
-    {
-        return $this->render('blog/index.html.twig');
-    }
+
 }

@@ -1,15 +1,20 @@
-index:
-    path: /
-    controller: App\Controller\BlogController::index
 
 post:
-    path: /post
+    path: /
     controller: App\Controller\PostController::index
 
 post_create:
     path: /post/new
     controller: App\Controller\PostController::createPost
 
+post_delete_all:
+  path : /post/delete
+  controller: App\Controller\PostController::deleteAllPost
+
 post_show:
     path: /post/{id}
     controller: App\Controller\PostController::showPost
+
+post_delete:
+  path : /post/delete/{id}
+  controller: App\Controller\PostController::deletePost

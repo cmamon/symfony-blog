@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostController extends AbstractController
 {
     /**
-     * @Route("/post", name="post")
+     * @Route("/", name="post")
      */
     public function index()
     {
@@ -31,6 +31,30 @@ class PostController extends AbstractController
         return $this->render('post/index.html.twig', [
             'posts' => $posts,
         ]);
+    }
+
+    /**
+     * @Route("/post/delete", name="post_delete_all")
+     */
+    public function deleteAllPost()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $posts = $this->getDoctrine()
+        ->getRepository(Post::class)
+        ->findAll();
+
+        if (!$posts) {
+          return new Response('No post to delete');
+        }
+
+        foreach ($posts as $key => $post) {
+          $entityManager->remove($post);
+        }
+
+        $entityManager->flush();
+
+        return new Response('Deleted all product ');
     }
 
     /**
@@ -56,8 +80,12 @@ class PostController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return $this->render('post/create.html.twig', [
-            'id' => $post->getId(),
+        $posts = $this->getDoctrine()
+          ->getRepository(Post::class)
+          ->findAll();
+
+        return $this->render('post/index.html.twig', [
+            'posts' => $posts,
         ]);
     }
 
@@ -66,6 +94,8 @@ class PostController extends AbstractController
      */
     public function deletePost($id): Response
     {
+        $entityManager = $this->getDoctrine()->getManager();
+
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
             ->find($id);
@@ -112,6 +142,18 @@ class PostController extends AbstractController
             ->getRepository(Post::class)
             ->find($id);
 
+        $posts = $this->getDoctrine()
+            ->getRepository(Post::class)
+            ->findAll();
+
+        foreach ($posts as $key => $post) {
+          if($post->getId() == $id){
+            $id_previous = ($key-1 >= 0) ? $posts[$key-1]->getId() : null;
+            $id_next = ($key+1 < count($posts)) ? $posts[$key+1]->getId() : null;
+            break;
+          }
+        }
+
         if (!$post) {
             throw $this->createNotFoundException(
                 'No post found for id '.$id
@@ -123,7 +165,9 @@ class PostController extends AbstractController
             'post_name' => $post->getName(),
             'post_slug' => $post->getSlug(),
             'post_pub_date' => $post->getPublicationDate()->format('d-m-Y H:i:s'),
-            'post_content' => $post->getContent()
+            'post_content' => $post->getContent(),
+            'id_previous' => $id_previous ,
+            'id_next' => $id_next
         ]);
     }
 }

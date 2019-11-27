@@ -22,6 +22,26 @@
           </div>
         </div>
       </div>
+
+      <div class="field is-grouped">
+        <p class="control">
+
+          <a class="button is-dark " {%if id_previous != null %} href="{{ path('post_show', {'id': id_previous}) }}" {% else %} style="visibility: hidden;"{% endif %} >
+            Previous
+          </a>
+
+          <a class="button is-dark" href="{{ path('post') }}">
+            Back
+          </a>
+
+          <a class="button is-dark " {%if id_next != null %} href="{{ path('post_show', {'id': id_next}) }}"{% else %} style="visibility: hidden;"{% endif %} >
+            Next
+          </a>
+
+        </p>
+      </div>
+
+
     </div>
   </section>
 {% endblock %}
