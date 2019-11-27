@@ -1,5 +1,5 @@
 
-post:
+index:
     path: /
     controller: App\Controller\PostController::index
 
@@ -8,13 +8,17 @@ post_create:
     controller: App\Controller\PostController::createPost
 
 post_delete_all:
-  path : /post/delete
-  controller: App\Controller\PostController::deleteAllPost
+    path : /post/delete
+    controller: App\Controller\PostController::deleteAllPost
 
 post_show:
     path: /post/{id}
     controller: App\Controller\PostController::showPost
 
 post_delete:
-  path : /post/delete/{id}
-  controller: App\Controller\PostController::deletePost
+    path : /post/delete/{id}
+    controller: App\Controller\PostController::deletePost
+
+register:
+    path : /register
+    controller: App\Controller\RegistrationController::register

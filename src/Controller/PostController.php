@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostController extends AbstractController
 {
     /**
-     * @Route("/", name="post")
+     * @Route("/", name="index")
      */
     public function index()
     {
@@ -45,11 +45,11 @@ class PostController extends AbstractController
         ->findAll();
 
         if (!$posts) {
-          return new Response('No post to delete');
+            return new Response('No post to delete');
         }
 
         foreach ($posts as $key => $post) {
-          $entityManager->remove($post);
+            $entityManager->remove($post);
         }
 
         $entityManager->flush();
@@ -147,11 +147,11 @@ class PostController extends AbstractController
             ->findAll();
 
         foreach ($posts as $key => $post) {
-          if($post->getId() == $id){
-            $id_previous = ($key-1 >= 0) ? $posts[$key-1]->getId() : null;
-            $id_next = ($key+1 < count($posts)) ? $posts[$key+1]->getId() : null;
-            break;
-          }
+            if ($post->getId() == $id) {
+                $id_previous = ($key-1 >= 0) ? $posts[$key-1]->getId() : null;
+                $id_next = ($key+1 < count($posts)) ? $posts[$key+1]->getId() : null;
+                break;
+            }
         }
 
         if (!$post) {

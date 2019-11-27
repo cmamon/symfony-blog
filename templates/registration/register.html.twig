@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Register</h1>
+    <div class="columns is-centered">
+      {{ form_start(registrationForm) }}
+          <div class="field">
+            <div class="control">
+              {{ form_row(registrationForm.email, {'attr': {'class': 'input'}}) }}
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'input'}}) }}
+            </div>
+          </div>
+          <div class="control">
+            <button class="button is-link">Register</button>
+          </div>
+      {{ form_end(registrationForm) }}
+    </div>
+  </div>
+</section>
+{% endblock %}
