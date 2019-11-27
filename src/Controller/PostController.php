@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Controller for posts.
@@ -69,23 +71,16 @@ class PostController extends AbstractController
         $slugger = new Slugger();
 
         $post = new Post();
-        $post->setName('Keyboard');
         $post->setPublicationDate(new \DateTime());
-        $post->setContent('Ergonomic and stylish!');
-        $post->setSlug($slugger->slugify($post->getName()));
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($post);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
-
-        $posts = $this->getDoctrine()
-          ->getRepository(Post::class)
-          ->findAll();
+        $form = $this->createFormBuilder($post)
+          ->add('name',       TextType::class)
+          ->add('content',    TextareaType::class)
+          ->add('slug',     TextType::class)
+          ->getForm();
 
         return $this->render('post/index.html.twig', [
-            'posts' => $posts,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -94,7 +89,21 @@ class PostController extends AbstractController
      */
     public function showForm()
     {
-        return $this->render('post/create.html.twig');
+      $slugger = new Slugger();
+
+      $post = new Post();
+      $post->setPublicationDate(new \DateTime());
+
+
+      $form = $this->createFormBuilder($post)
+        ->add('name',       TextType::class)
+        ->add('content',    TextareaType::class)
+        ->add('slug',     TextType::class)
+        ->getForm();
+
+      return $this->render('post/create.html.twig', [
+          'form' => $form->createView(),
+      ]);
     }
 
     /**
