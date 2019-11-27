@@ -17,12 +17,11 @@
       <h1 class="title">Post list</h1>
 
       {% for post in posts %}
-      {% if loop.index0 == 0 %}
-        <article class="message is-success">
-      {% else %}
-        <article class="message">
-      {% endif %}
-        <div class="message-header">
+
+        <article class="message {% if loop.index0 == 0 %} is_lastness {% endif %}">
+
+          <div class="message-header {% if loop.index0 == 0 %} is_lastness {% endif %}">
+
           <p>{{ posts[loop.revindex0].name }}</p>
         </div>
         <div class="message-body">
@@ -31,7 +30,7 @@
         <br><br>
         <div class="field is-grouped">
           <p class="control">
-            <a class="button is-dark" href="{{ path('post_show', {'id': posts[loop.revindex0].id}) }}">
+            <a class="button is-dark {% if loop.index0 == 0 %} is_lastness {% endif %}" href="{{ path('post_show', {'id': posts[loop.revindex0].id}) }}">
               View article >>
             </a>
           </p>
