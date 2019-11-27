@@ -9,6 +9,42 @@
 
 <h1 class="title">New Post</h1>
 
-{{ form(form) }}
+{{ form_start(form) }}
+<section class="form">
+  <div class="field">
+    <label class="label">Username</label>
+    <div class="control">
+      {{ form_widget(form.slug, { 'attr': {'class': 'input'} }) }}
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Title</label>
+    <div class="control">
+        {{ form_widget(form.name, { 'attr': {'class': 'input'} }) }}
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Message</label>
+    <div class="control ">
+        {{ form_widget(form.content, { 'attr': {'class': 'textarea'} }) }}
+    </div>
+  </div>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <a class="button is-link" href="{{ path('post_create') }}">
+        Submit
+      </a>
+    </div>
+    <div class="control">
+      <a class="button is-link is-light" href="{{ path('post') }}">
+        Cancel
+      </a>
+    </div>
+  </div>
+</section>
+{{ form_end(form) }}
 
 {% endblock %}
