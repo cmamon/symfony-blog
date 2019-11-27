@@ -9,6 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controller for posts.
@@ -60,33 +64,36 @@ class PostController extends AbstractController
     /**
      * @Route("/post/new", name="post_create")
      */
-    public function createPost()
+    public function showForm(Request $request)
     {
-        // you can fetch the EntityManager via $this->getDoctrine()
-        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
-        $entityManager = $this->getDoctrine()->getManager();
+      $slugger = new Slugger();
 
-        $slugger = new Slugger();
+      $post = new Post();
+      $post->setPublicationDate(new \DateTime());
 
-        $post = new Post();
-        $post->setName('Keyboard');
-        $post->setPublicationDate(new \DateTime());
-        $post->setContent('Ergonomic and stylish!');
-        $post->setSlug($slugger->slugify($post->getName()));
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($post);
+      $form = $this->createFormBuilder($post)
+        ->add('name',       TextType::class)
+        ->add('content',    TextareaType::class)
+        ->add('slug',       TextType::class)
+        ->add('submit',       SubmitType::class)
+        ->getForm();
 
-        // actually executes the queries (i.e. the INSERT query)
-        $entityManager->flush();
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
 
-        $posts = $this->getDoctrine()
-          ->getRepository(Post::class)
-          ->findAll();
+          $post = $form->getData();
 
-        return $this->render('post/index.html.twig', [
-            'posts' => $posts,
-        ]);
+          $entityManager = $this->getDoctrine()->getManager();
+          $entityManager->persist($post);
+          $entityManager->flush();
+
+          return $this->redirectToRoute('post');
+      }
+
+      return $this->render('post/create.html.twig', [
+          'form' => $form->createView(),
+      ]);
     }
 
     /**
