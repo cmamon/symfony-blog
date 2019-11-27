@@ -1,13 +1,59 @@
 @lastness-body-bg-color: #effaf3;    // lastness
 @lastness-header-bg-color: #48c774;    // lastness
-@white : #fff;    // old one
-@queue-bg-color: #000;
+@lastness-button-bg-color: #48c774;    // lastness
+
+@oldness-body-bg-color: #f5f5f5;    // oldness
+@oldness-header-bg-color: #4a4a4a;    // oldness
+@oldness-button-bg-color: #363636;    // oldness
+
+@-webkit-keyframes lastPostHeaderTransition {
+  from {
+      background-color: @lastness-header-bg-color;
+    }
+  to{
+      background-color: @oldness-header-bg-color;
+    }
+}
+
+@-webkit-keyframes lastPostBodyTransition {
+  0% {
+      background-color: @lastness-body-bg-color;
+    }
+  100%{
+      background-color: @oldness-body-bg-color;
+    }
+}
+
+@-webkit-keyframes lastPostButtonTransition {
+  0% {
+      background-color: @lastness-button-bg-color;
+    }
+  100%{
+      background-color: @oldness-button-bg-color;
+      box-shadow:none;
+    }
+}
 
 .message.is_lastness{
   background-color:@lastness-body-bg-color;
+  -webkit-animation-name: lastPostBodyTransition;
+  -webkit-animation-duration: 5s;
+  -webkit-animation-delay: 5s;
+  -webkit-animation-fill-mode: forwards;
 }
 
-.message-header.is_lastness,.button.is-dark.is_lastness{
+.button.is-dark.is_lastness{
+  background-color:@lastness-button-bg-color;
+  -webkit-animation-name: lastPostButtonTransition;
+  -webkit-animation-duration: 5s;
+  -webkit-animation-delay: 5s;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.message-header.is_lastness{
   background-color:@lastness-header-bg-color;
-  color:@white;
+  -webkit-animation-name: lastPostHeaderTransition;
+  -webkit-animation-duration: 5s;
+  -webkit-animation-delay: 5s;
+  -webkit-animation-fill-mode: forwards;
 }
