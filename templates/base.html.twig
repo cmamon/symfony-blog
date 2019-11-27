@@ -15,17 +15,15 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.0.0/less.min.js" type="text/javascript"></script>
     </head>
     <body>
-        <header>{% block header %}{% endblock %}</header>
+        <header>
+        {% block header %}
+            {% include 'header.html.twig' %}
+        {% endblock %}
+        </header>
         {% block body %}{% endblock %}
         <footer>
         {% block footer %}
-            <div class="content has-text-centered">
-                <p>
-                    <strong>Symfony blog</strong> by
-                    <a href="https://github.com/cmamon">Christophe QUENETTE</a> and
-                    <a href="https://github.com/stremor-03">Sullyvan TREMOR</a>.
-                </p>
-            </div>
+            {% include 'footer.html.twig' %}
         {% endblock %}
         </footer>
         {% block javascripts %}{% endblock %}
