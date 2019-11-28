@@ -2,14 +2,14 @@
 index:
     path: /
     controller: App\Controller\PostController::index
-    
+
 register:
     path : /register
     controller: App\Controller\RegistrationController::register
 
-form_create:
+post_create:
     path: /post/new
-    controller: App\Controller\PostController::showForm
+    controller: App\Controller\PostController::createPost
 
 post_delete_all:
     path : /post/delete
