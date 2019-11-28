@@ -60,7 +60,7 @@ class PostController extends AbstractController
     /**
      * @Route("/post/new", name="post_create")
      */
-    public function showForm(Request $request)
+    public function createPost(Request $request)
     {
         $slugger = new Slugger();
 
@@ -87,8 +87,8 @@ class PostController extends AbstractController
         }
 
         return $this->render('post/create.html.twig', [
-          'form' => $form->createView(),
-      ]);
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
