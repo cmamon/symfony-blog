@@ -23,6 +23,9 @@
         <article class="message {% if loop.index0 == 0 %} is_lastness {% endif %}">
           <div class="message-header {% if loop.index0 == 0 %} is_lastness {% endif %}">
             <p>{{ posts[loop.revindex0].name }}</p>
+              <a href="{{ path('post_delete', {'id': posts[loop.revindex0].id}) }}">
+                <i class="far fa-times-circle" ></i>
+              </a>
           </div>
           <div class="message-body">
             <em>{{ posts[loop.revindex0].publicationDate.format('H:i \o\n l jS F Y') }} </em><br>

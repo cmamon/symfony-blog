@@ -111,7 +111,13 @@ class PostController extends AbstractController
         $entityManager->remove($post);
         $entityManager->flush();
 
-        return new Response('Deleted product with id '.$post->getId());
+        $posts = $this->getDoctrine()
+        ->getRepository(Post::class)
+        ->findAll();
+
+        return $this->redirectToRoute('index', [
+            'posts' => $posts,
+        ]);
     }
 
     /**
