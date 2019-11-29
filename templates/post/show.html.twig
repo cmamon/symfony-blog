@@ -14,6 +14,9 @@
         <div class="tile is-parent">
           <div class="tile is-child box">
             <p class="title">{{post_name}}</p>
+            <figure class="image" style="margin-left: auto;margin-right: auto;">
+              <img src="{{ asset('files/images/' ~ post_image) }}"><br>
+            </figure>
             <ul>
                 <li>Slug : {{post_slug}}</li>
                 <li>Publication date : {{post_pub_date}} </li>

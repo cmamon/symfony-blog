@@ -213,6 +213,7 @@ class PostController extends AbstractController
             'post_slug' => $post->getSlug(),
             'post_pub_date' => $post->getPublicationDate()->format('d-m-Y H:i:s'),
             'post_content' => $post->getContent(),
+            'post_image' => $post->getImage(),
             'id_previous' => $id_previous ,
             'id_next' => $id_next
         ]);
