@@ -21,3 +21,5 @@
 /public/node_modules
 
 templates/.DS_Store
+
+public/files/images/
