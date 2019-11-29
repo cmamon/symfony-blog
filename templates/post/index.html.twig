@@ -8,6 +8,7 @@
       <h1 class="title">Welcome on our wonderful blog</h1>
     </div>
   </section>
+
   <section class="section">
     <div class="container">
 
@@ -21,13 +22,18 @@
 
       {% for post in posts %}
         <article class="message {% if loop.index0 == 0 %} is_lastness {% endif %}">
+
           <div class="message-header {% if loop.index0 == 0 %} is_lastness {% endif %}">
+
             <p>{{ posts[loop.revindex0].name }}</p>
               <a href="{{ path('post_delete', {'id': posts[loop.revindex0].id}) }}">
                 <i class="far fa-times-circle" ></i>
               </a>
           </div>
           <div class="message-body">
+            <figure class="image" style="margin-left: auto;margin-right: auto;">
+              <img src="{{ asset('files/images/' ~ posts[loop.revindex0].image) }}"><br>
+            </figure>
             <em>{{ posts[loop.revindex0].publicationDate.format('H:i \o\n l jS F Y') }} </em><br>
             {{ posts[loop.revindex0].content }}
             <br><br>

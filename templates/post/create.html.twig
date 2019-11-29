@@ -42,6 +42,20 @@
       </a>
     </div>
   </div>
+
+  <div class="file has-name is-right">
+  <label class="file-label">
+    {{ form_widget(form.image, { 'attr': {'class': 'file-input'} }) }}
+
+    <span class="file-cta">
+      <span class="file-icon">
+        <i class="fas fa-upload"></i>
+      </span>
+      {{ form_label(form.image,form.image ,{ 'label_attr': {'class': 'file-label'} }) }}
+    </span>
+
+  </label>
+</div>
 </section>
 {{ form_end(form) }}
 
