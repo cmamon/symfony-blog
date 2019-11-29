@@ -12,7 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Gedmo\Sluggable\Util\Urlizer;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Controller for posts.
@@ -67,17 +73,50 @@ class PostController extends AbstractController
         $post = new Post();
         $post->setPublicationDate(new \DateTime());
 
-
         $form = $this->createFormBuilder($post)
         ->add('name', TextType::class)
         ->add('content', TextareaType::class)
         ->add('slug', TextType::class)
         ->add('submit', SubmitType::class)
+        ->add('image', FileType::class, [
+                'label' => 'Choose a file..',
+
+                // unmapped means that this field is not associated to any entity property
+                'mapped' => false,
+
+                // make it optional so you don't have to re-upload the PDF file
+                // everytime you edit the Product details
+                'required' => false,
+
+                // unmapped fields can't define their validation using annotations
+                // in the associated entity, so you can use the PHP constraint classes
+
+            ])
         ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
+            $image = $form['image']->getData();
+
+            if ($image) {
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$image->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $image->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $post->setImage($newFilename);
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
