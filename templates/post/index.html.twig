@@ -26,9 +26,17 @@
           <div class="message-header {% if loop.index0 == 0 %} is_lastness {% endif %}">
 
             <p>{{ posts[loop.revindex0].name }}</p>
-              <a href="{{ path('post_delete', {'id': posts[loop.revindex0].id}) }}">
+            <span>
+              <a style="padding-right: 15px" href="{{ path('post_delete', {'id': posts[loop.revindex0].id}) }}">
+                <i class="fas fa-thumbtack"></i>
+              </a>
+              <a style="padding-right: 15px" href="{{ path('post_delete', {'id': posts[loop.revindex0].id}) }}">
+                <i class="fas fa-edit"></i>
+              </a>
+              <a href="{{ path('post_delete', {'id': posts[loop.revindex0].id}) }}" >
                 <i class="far fa-times-circle" ></i>
               </a>
+            </span>
           </div>
           <div class="message-body">
             <figure class="image" style="margin-left: auto;margin-right: auto;">
