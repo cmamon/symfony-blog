@@ -22,3 +22,7 @@ post_show:
 post_delete:
     path : /post/delete/{id}
     controller: App\Controller\PostController::deletePost
+
+post_edit :
+    path : /post/edit/{id}
+    controller: App\Controller\PostController::editPost

@@ -80,7 +80,6 @@ class PostController extends AbstractController
         ->add('submit', SubmitType::class)
         ->add('image', FileType::class, [
                 'label' => 'Choose a file..',
-
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,
 
@@ -100,7 +99,6 @@ class PostController extends AbstractController
             $image = $form['image']->getData();
 
             if ($image) {
-                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$image->guessExtension();
@@ -162,22 +160,74 @@ class PostController extends AbstractController
     /**
      * @Route("/post/edit/{id}", name="post_edit")
      */
-    public function editPost($id): Response
+    public function editPost($id, Request $request): Response
     {
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
             ->find($id);
 
-        if (!$post) {
-            throw $this->createNotFoundException(
-                'No post found for id '.$id
-            );
-        }
+        $form = $this->createFormBuilder($post)
+            ->add('name', TextType::class, ['data' => $post->getName()])
+            ->add('content', TextareaType::class, ['data' => $post->getContent()])
+            ->add('slug', TextType::class, ['data' => $post->getSlug()])
+            ->add('submit', SubmitType::class)
+            ->add('image', FileType::class, [
 
+                    'label' => 'Choose a file..',
+
+                    // unmapped means that this field is not associated to any entity property
+                    'mapped' => false,
+
+                    // make it optional so you don't have to re-upload the PDF file
+                    // everytime you edit the Product details
+                    'required' => false,
+
+                    // unmapped fields can't define their validation using annotations
+                    // in the associated entity, so you can use the PHP constraint classes
+
+                ])
+            ->getForm();
+
+        $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($post);
         $entityManager->flush();
 
-        return new Response('Deleted product with id '.$post->getId());
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $editedPost = $form->getData();
+            $post->setName($editedPost->getName());
+            $post->setSlug($editedPost->getSlug());
+            $post->setContent($editedPost->getContent());
+            $image = $form['image']->getData();
+
+            if ($image) {
+                // this is needed to safely include the file name as part of the URL
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$image->guessExtension();
+                // Move the file to the directory where brochures are stored
+                try {
+                    $image->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+
+                $post->setImage($newFilename);
+            }
+
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('index');
+        }
+
+        return $this->render('post/edit.html.twig', [
+            'form' => $form->createView(),
+            'post_image' => $post->getImage()
+        ]);
     }
 
     /**
