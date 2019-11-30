@@ -19,6 +19,11 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('publicationDate' => 'DESC'));
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
