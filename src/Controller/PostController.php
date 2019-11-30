@@ -166,6 +166,8 @@ class PostController extends AbstractController
             ->getRepository(Post::class)
             ->find($id);
 
+        $entityManager = $this->getDoctrine()->getManager();
+
         $form = $this->createFormBuilder($post)
             ->add('name', TextType::class, ['data' => $post->getName()])
             ->add('content', TextareaType::class, ['data' => $post->getContent()])
@@ -187,10 +189,6 @@ class PostController extends AbstractController
 
                 ])
             ->getForm();
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($post);
-        $entityManager->flush();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -268,4 +266,31 @@ class PostController extends AbstractController
             'id_next' => $id_next
         ]);
     }
+
+    /**
+     * @Route("/post/pin/{id}", name="post_pinned")
+     */
+    public function pinPost($id)
+    {
+        $posts = $this->getDoctrine()
+        ->getRepository(Post::class)
+        ->findAll();
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        foreach ($posts as $post) {
+            if (!$post->isPinned()) {
+                $post->setIsPinned(true);
+            } else {
+                $post->setIsPinned(false);
+            }
+
+            $entityManager->persist($post);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('index');
+    }
 }
+//

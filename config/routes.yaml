@@ -26,3 +26,7 @@ post_delete:
 post_edit :
     path : /post/edit/{id}
     controller: App\Controller\PostController::editPost
+
+post_pinned : 
+    path : /post/pin/{id}
+    controller: App\Controller\PostController::pinPost

@@ -27,7 +27,7 @@
 
             <p>{{ posts[loop.revindex0].name }}</p>
             <span>
-              <a style="padding-right: 15px" href="{{ path('post_delete', {'id': posts[loop.revindex0].id}) }}">
+              <a style="padding-right: 15px" href="{{ path('post_pinned', {'id': posts[loop.revindex0].id}) }}">
                 <i class="fas fa-thumbtack"></i>
               </a>
               <a style="padding-right: 15px" href="{{ path('post_edit', {'id': posts[loop.revindex0].id}) }}">
