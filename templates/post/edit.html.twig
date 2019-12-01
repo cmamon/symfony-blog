@@ -3,20 +3,14 @@
 {% extends 'base.html.twig' %}
 
 
-{% block title %} Your new post {% endblock %}
+{% block title %} Update post {% endblock %}
 
 {% block body %}
 
-<h1 class="title">New Post</h1>
+<h1 class="title">Update Post</h1>
 
 {{ form_start(form)  }}
 <section class="form">
-  <div class="field">
-    <label class="label">Username</label>
-    <div class="control">
-      {{ form_widget(form.slug, { 'attr': {'class': 'input'} }) }}
-    </div>
-  </div>
 
   <div class="field">
     <label class="label">Title</label>
@@ -34,7 +28,7 @@
 
   <div class="field is-grouped">
     <div class="control">
-      {{ form_row(form.submit, { 'label': 'Submit me', 'attr': {'class': 'button is-link'}}) }}
+      {{ form_row(form.submit, { 'label': 'Update', 'attr': {'class': 'button is-link'}}) }}
     </div>
     <div class="control">
       <a class="button is-link is-light" href="{{ path('index') }}">
