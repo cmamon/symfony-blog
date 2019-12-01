@@ -41,6 +41,11 @@ class Post
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPinned = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,6 +107,18 @@ class Post
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function isPinned(): ?bool
+    {
+        return $this->isPinned;
+    }
+
+    public function setIsPinned(bool $isPinned): self
+    {
+        $this->isPinned = $isPinned;
 
         return $this;
     }

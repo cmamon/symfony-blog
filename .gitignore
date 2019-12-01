@@ -23,3 +23,7 @@
 templates/.DS_Store
 
 public/files/images/
+
+.DS_Store
+
+composer.phar
