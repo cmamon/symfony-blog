@@ -68,15 +68,11 @@ class PostController extends AbstractController
      */
     public function createPost(Request $request)
     {
-        $slugger = new Slugger();
-
         $post = new Post();
-        $post->setPublicationDate(new \DateTime());
 
         $form = $this->createFormBuilder($post)
         ->add('name', TextType::class)
         ->add('content', TextareaType::class)
-        ->add('slug', TextType::class)
         ->add('submit', SubmitType::class)
         ->add('image', FileType::class, [
                 'label' => 'Choose a file..',
@@ -96,6 +92,12 @@ class PostController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
+            $post->setPublicationDate(new \DateTime());
+
+            // create slug based on post name
+            $slugger = new Slugger();
+            $post->setSlug($slugger->slugify($post->getName()));
+
             $image = $form['image']->getData();
 
             if ($image) {
@@ -171,7 +173,6 @@ class PostController extends AbstractController
         $form = $this->createFormBuilder($post)
             ->add('name', TextType::class, ['data' => $post->getName()])
             ->add('content', TextareaType::class, ['data' => $post->getContent()])
-            ->add('slug', TextType::class, ['data' => $post->getSlug()])
             ->add('submit', SubmitType::class)
             ->add('image', FileType::class, [
 
@@ -194,7 +195,11 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $editedPost = $form->getData();
             $post->setName($editedPost->getName());
-            $post->setSlug($editedPost->getSlug());
+
+            // create slug based on post name
+            $slugger = new Slugger();
+            $post->setSlug($slugger->slugify($post->getName()));
+
             $post->setContent($editedPost->getContent());
             $image = $form['image']->getData();
 
