@@ -23,14 +23,19 @@
       {% for post in posts %}
         <article
           class="message
-      {% if (loop.index0 == 0 and not post.isPinned())
-          or (loop.index0 == 1 and not posts[0].isPinned())
-          or (loop.length > 1 and posts[0].getPublicationDate() < posts[1].getPublicationDate()) %}
-        is_lastness
-      {% endif %}
+          {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+          or (( not posts[0].isPinned() ) and loop.index0 == 0)
+          or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
+          is_lastness
+          {% endif %}
       ">
 
-          <div class="message-header {% if loop.index0 == 0 %} is_lastness {% endif %}">
+          <div class="message-header
+          {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+          or (( not posts[0].isPinned() ) and loop.index0 == 0)
+          or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
+          is_lastness
+          {% endif %}">
 
             <p>{{ post.name }}</p>
             <span>
@@ -53,13 +58,18 @@
             <figure class="image" style="margin-left: auto;margin-right: auto;">
               <img src="{{ asset('files/images/' ~ post.image) }}"><br>
             </figure>
-            <em>{{ post.publicationDate.format('H:i \o\n l jS F Y') }}
+            <em>{{ post.publicationDate.format('H:i:s \o\n l jS F Y') }}
             </em><br>
             {{ post.content }}
             <br><br>
             <div class="field is-grouped">
               <p class="control">
-                <a class="button is-dark {% if loop.index0 == 0 %} is_lastness {% endif %}" href="{{ path('post_show', {'id': post.id}) }}">
+                <a class="button is-dark
+                {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+                or (( not posts[0].isPinned() ) and loop.index0 == 0)
+                or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
+                is_lastness
+                {% endif %}" href="{{ path('post_show', {'id': post.id}) }}">
                   View article >>
                 </a>
               </p>
