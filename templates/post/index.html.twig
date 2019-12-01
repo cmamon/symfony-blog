@@ -21,34 +21,45 @@
       </div>
 
       {% for post in posts %}
-        <article class="message {% if loop.index0 == 0 %} is_lastness {% endif %}">
+        <article
+          class="message
+      {% if (loop.index0 == 0 and not post.isPinned())
+          or (loop.index0 == 1 and not posts[0].isPinned())
+          or (loop.length > 1 and posts[0].getPublicationDate() < posts[1].getPublicationDate()) %}
+        is_lastness
+      {% endif %}
+      ">
 
           <div class="message-header {% if loop.index0 == 0 %} is_lastness {% endif %}">
 
-            <p>{{ posts[loop.index0].name }}</p>
+            <p>{{ post.name }}</p>
             <span>
-              <a style="padding-right: 15px" href="{{ path('post_pinned', {'id': posts[loop.index0].id}) }}">
-                <i class="fas fa-thumbtack"></i>
+              <a style="padding-right: 15px" href="{{ path('post_pinned', {'id': post.id}) }}">
+                {% if post.isPinned() %}
+                  <i class="fas fa-lock"></i>
+                {% else %}
+                  <i class="fas fa-lock-open"></i>
+                {% endif %}
               </a>
-              <a style="padding-right: 15px" href="{{ path('post_edit', {'id': posts[loop.index0].id}) }}">
+              <a style="padding-right: 15px" href="{{ path('post_edit', {'id': post.id}) }}">
                 <i class="fas fa-edit"></i>
               </a>
-              <a href="{{ path('post_delete', {'id': posts[loop.index0].id}) }}" >
-                <i class="far fa-times-circle" ></i>
+              <a href="{{ path('post_delete', {'id': post.id}) }}">
+                <i class="far fa-times-circle"></i>
               </a>
             </span>
           </div>
           <div class="message-body">
             <figure class="image" style="margin-left: auto;margin-right: auto;">
-              <img src="{{ asset('files/images/' ~ posts[loop.index0].image) }}"><br>
+              <img src="{{ asset('files/images/' ~ post.image) }}"><br>
             </figure>
-            <em>{{ posts[loop.index0].publicationDate.format('H:i \o\n l jS F Y') }} </em><br>
-            {{ posts[loop.index0].content }}
+            <em>{{ post.publicationDate.format('H:i \o\n l jS F Y') }}
+            </em><br>
+            {{ post.content }}
             <br><br>
             <div class="field is-grouped">
               <p class="control">
-                <a class="button is-dark {% if loop.index0 == 0 %} is_lastness {% endif %}"
-                   href="{{ path('post_show', {'id': posts[loop.index0].id}) }}">
+                <a class="button is-dark {% if loop.index0 == 0 %} is_lastness {% endif %}" href="{{ path('post_show', {'id': post.id}) }}">
                   View article >>
                 </a>
               </p>

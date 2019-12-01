@@ -279,7 +279,7 @@ class PostController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         foreach ($posts as $post) {
-            if (!$post->isPinned()) {
+            if (!$post->isPinned() && $id == $post->getId()) {
                 $post->setIsPinned(true);
             } else {
                 $post->setIsPinned(false);
