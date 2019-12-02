@@ -282,7 +282,7 @@ class PostController extends AbstractController
             'post_content' => $post->getContent(),
             'post_image' => $post->getImage(),
             'form' => $form->createView(),
-            'comments' => $comments
+            'comments' => $comments,
             'slug_previous' => $slug_previous,
             'slug_next' => $slug_next
         ]);
