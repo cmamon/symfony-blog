@@ -264,7 +264,7 @@ class PostController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_show', ['post_slug' => $post->getSlug()]);
+            return $this->redirectToRoute('post_show', ['slug' => $slug]);
         }
 
         $repository = $this->getDoctrine()->getRepository(Comment::class);
