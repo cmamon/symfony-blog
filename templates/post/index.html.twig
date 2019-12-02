@@ -24,7 +24,7 @@
         <article
           class="message
           {% if (loop.length == 1)
-          or (loop.lenght > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+          or (loop.length > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
           or (( not posts[0].isPinned() ) and loop.index0 == 0)
           or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
           is_lastness
@@ -32,7 +32,7 @@
 
           <div class="message-header
           {% if (loop.length == 1)
-          or (loop.lenght > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+          or (loop.length > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
           or (( not posts[0].isPinned() ) and loop.index0 == 0)
           or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
           is_lastness
@@ -67,7 +67,7 @@
               <p class="control">
                 <a class="button is-dark
                 {% if (loop.length == 1)
-                or (loop.lenght > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+                or (loop.length > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
                 or (( not posts[0].isPinned() ) and loop.index0 == 0)
                 or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
                 is_lastness

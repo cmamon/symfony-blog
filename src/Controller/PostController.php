@@ -233,7 +233,7 @@ class PostController extends AbstractController
     /**
      * @Route("/post/{id}", name="post_show")
      */
-    public function showPost($id)
+    public function showPost($id, Request $request): Response
     {
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
@@ -257,6 +257,27 @@ class PostController extends AbstractController
             );
         }
 
+        $comment = new Comment();
+
+        $form = $this->createFormBuilder($comment)
+            ->add('message', TextareaType::class)
+            ->add('submit', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setPostId($id);
+            $comment->setUser(100);
+            $comment->setPublicationDate(new \DateTime());
+            $comment->setMessage($form['message']->getData());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('post_show', ['id' => $id]);
+        }
+
         $repository = $this->getDoctrine()->getRepository(Comment::class);
 
         $comments = $repository->findBy(
@@ -268,11 +289,12 @@ class PostController extends AbstractController
             'id' => $id,
             'post_name' => $post->getName(),
             'post_slug' => $post->getSlug(),
-            'post_pub_date' => $post->getPublicationDate()->format('d-m-Y H:i:s'),
+            'post_pub_date' => $post->getPublicationDate()->format('H:i:s \o\n l jS F Y'),
             'post_content' => $post->getContent(),
             'post_image' => $post->getImage(),
             'id_previous' => $id_previous ,
             'id_next' => $id_next,
+            'form' => $form->createView(),
             'comments' => $comments
         ]);
     }
