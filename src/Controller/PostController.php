@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\Comment;
 use App\Utils\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Gedmo\Sluggable\Util\Urlizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Repository\CommentRepository;
 
 /**
  * Controller for posts.
@@ -255,6 +257,13 @@ class PostController extends AbstractController
             );
         }
 
+        $repository = $this->getDoctrine()->getRepository(Comment::class);
+
+        $comments = $repository->findBy(
+            array('postId' => $id),
+            array('publicationDate' => 'DESC')
+        );
+
         return $this->render('post/show.html.twig', [
             'id' => $id,
             'post_name' => $post->getName(),
@@ -263,7 +272,8 @@ class PostController extends AbstractController
             'post_content' => $post->getContent(),
             'post_image' => $post->getImage(),
             'id_previous' => $id_previous ,
-            'id_next' => $id_next
+            'id_next' => $id_next,
+            'comments' => $comments
         ]);
     }
 

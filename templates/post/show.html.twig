@@ -6,6 +6,11 @@
 {% block title %}Blog{% endblock %}
 
 {% block body %}
+  <script>
+  function openForm() {
+    document.getElementById("commentForm").style.display = "block";
+  }
+  </script>
   <section class="section">
     <div class="container">
       <h1 class="title">Post {{ id }}</h1>
@@ -22,9 +27,19 @@
                 <li>Publication date : {{post_pub_date}} </li>
                 <li>Content : {{post_content}}</li>
             </ul>
+            <br>
+            <button class="field is-grouped control button is-dark" onclick="openForm()">Comment</button>
+
+            <div id="commentForm">
+              {# //Form #}
+            </div>
           </div>
         </div>
       </div>
+
+      {% for comment in comments %}
+        <p>{{ comment.message }}</p>
+      {% endfor %}
 
       <div class="field is-grouped">
         <p class="control">
