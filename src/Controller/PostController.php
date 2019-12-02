@@ -9,6 +9,10 @@ use App\Utils\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -164,18 +168,10 @@ class PostController extends AbstractController
             ->add('content', TextareaType::class, ['data' => $post->getContent()])
             ->add('submit', SubmitType::class)
             ->add('image', FileType::class, [
-                    'label' => 'Choose a file..',
-
-                    // unmapped means that this field is not associated to any entity property
-                    'mapped' => false,
-
-                    // make it optional so you don't have to re-upload the PDF file
-                    // everytime you edit the Product details
-                    'required' => false,
-
-                    // unmapped fields can't define their validation using annotations
-                    // in the associated entity, so you can use the PHP constraint classes
-                ])
+                'label' => 'Choose a file..',
+                'mapped' => false,
+                'required' => false,
+            ])
             ->getForm();
 
         $form->handleRequest($request);
