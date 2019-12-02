@@ -10,15 +10,25 @@
   </section>
 
   <section class="section">
-    <div class="container">
+    <div class="columns is-mobile">
+      <div class="column is-three-fifths is-offset-one-fifth">
+          <div class="field is-grouped">
+            <p class="control">
+              <a class="button is-dark" href="{{ path('post_create') }}">
+                Write a post >>
+              </a>
+            </p>
+          </div>
 
-      <div class="field is-grouped">
-        <p class="control">
-          <a class="button is-dark" href="{{ path('post_create') }}">
-            Write a post >>
-          </a>
-        </p>
-      </div>
+          {% for post in posts %}
+            <article
+              class="message
+              {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+              or (( not posts[0].isPinned() ) and loop.index0 == 0)
+              or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
+              is_lastness
+              {% endif %}
+          ">
 
       {% for post in posts %}
         <article

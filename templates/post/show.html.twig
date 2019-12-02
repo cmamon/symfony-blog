@@ -2,7 +2,6 @@
 
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Blog{% endblock %}
 
 {% block body %}
@@ -78,6 +77,24 @@
             </div>
           </div>
         </div>
+        <div class="field is-grouped">
+          <p class="control">
+            <a class="button is-dark" {%if slug_previous != null %}
+              href="{{ path('post_show', {'slug': slug_previous}) }}"
+              {% else %} style="visibility: hidden;"{% endif %}
+            >
+              Previous
+            </a>
+            <a class="button is-dark" href="{{ path('index') }}">
+              Back
+            </a>
+            <a class="button is-dark" {%if slug_next != null %}
+              href="{{ path('post_show', {'slug': slug_next}) }}"
+              {% else %} style="visibility: hidden;"{% endif %}
+            >
+              Next
+            </a>
+          </p>
       </div>
 
       <div class="field is-grouped">
@@ -94,11 +111,8 @@
           <a class="button is-dark " {%if id_next != null %} href="{{ path('post_show', {'id': id_next}) }}"{% else %} style="visibility: hidden;"{% endif %} >
             Next
           </a>
-
         </p>
       </div>
-
-
     </div>
   </section>
   {{ form_end(form)  }}
