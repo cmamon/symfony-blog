@@ -4,17 +4,16 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\Type\PostFormType;
 use App\Utils\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Gedmo\Sluggable\Util\Urlizer;
@@ -60,7 +59,7 @@ class PostController extends AbstractController
 
         $entityManager->flush();
 
-        return new Response('Deleted all product ');
+        return new Response('Deleted all posts');
     }
 
     /**
@@ -70,34 +69,17 @@ class PostController extends AbstractController
     {
         $post = new Post();
 
-        $form = $this->createFormBuilder($post)
-        ->add('name', TextType::class)
-        ->add('content', TextareaType::class)
-        ->add('submit', SubmitType::class)
-        ->add('image', FileType::class, [
-                'label' => 'Choose a file..',
-                // unmapped means that this field is not associated to any entity property
-                'mapped' => false,
-
-                // make it optional so you don't have to re-upload the PDF file
-                // everytime you edit the Product details
-                'required' => false,
-
-                // unmapped fields can't define their validation using annotations
-                // in the associated entity, so you can use the PHP constraint classes
-
-            ])
-        ->getForm();
-
+        $form = $this->createForm(PostFormType::class, $post);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
-            $post->setPublicationDate(new \DateTime());
 
             // create slug based on post name
             $slugger = new Slugger();
             $post->setSlug($slugger->slugify($post->getName()));
 
+            $post->setPublicationDate(new \DateTime());
             $image = $form['image']->getData();
 
             if ($image) {
@@ -112,7 +94,7 @@ class PostController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    // handle exception if something happens during file upload
                 }
 
                 $post->setImage($newFilename);
@@ -120,7 +102,14 @@ class PostController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+            } catch (UniqueConstraintViolationException $e) {
+                return $this->render('post/create.html.twig', [
+                    'form' => $form->createView(),
+                    'error' => ['message' => 'There is already a post with this title.'],
+                ]);
+            }
 
             return $this->redirectToRoute('index');
         }
@@ -175,7 +164,6 @@ class PostController extends AbstractController
             ->add('content', TextareaType::class, ['data' => $post->getContent()])
             ->add('submit', SubmitType::class)
             ->add('image', FileType::class, [
-
                     'label' => 'Choose a file..',
 
                     // unmapped means that this field is not associated to any entity property
@@ -187,7 +175,6 @@ class PostController extends AbstractController
 
                     // unmapped fields can't define their validation using annotations
                     // in the associated entity, so you can use the PHP constraint classes
-
                 ])
             ->getForm();
 
@@ -214,9 +201,8 @@ class PostController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                    // handle exception if something happens during file upload
                 }
-
 
                 $post->setImage($newFilename);
             }
@@ -234,30 +220,32 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/post/{id}", name="post_show")
+     * @Route("/post/{slug}", name="post_show")
      */
-    public function showPost($id)
+    public function showPost($slug)
     {
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
-            ->find($id);
+            ->findOneBy(['slug' => $slug]);
+
+        if (!$post) {
+            throw $this->createNotFoundException(
+                'No post found for slug "'.$slug.'".'
+            );
+        }
+
+        $id = $post->getId();
 
         $posts = $this->getDoctrine()
             ->getRepository(Post::class)
             ->findAll();
 
         foreach ($posts as $key => $post) {
-            if ($post->getId() == $id) {
-                $id_previous = ($key-1 >= 0) ? $posts[$key-1]->getId() : null;
-                $id_next = ($key+1 < count($posts)) ? $posts[$key+1]->getId() : null;
+            if ($post->getId() === $id) {
+                $slug_previous = ($key - 1 >= 0) ? $posts[$key - 1]->getSlug() : null;
+                $slug_next = ($key + 1 < count($posts)) ? $posts[$key + 1]->getSlug() : null;
                 break;
             }
-        }
-
-        if (!$post) {
-            throw $this->createNotFoundException(
-                'No post found for id '.$id
-            );
         }
 
         return $this->render('post/show.html.twig', [
@@ -267,8 +255,8 @@ class PostController extends AbstractController
             'post_pub_date' => $post->getPublicationDate()->format('d-m-Y H:i:s'),
             'post_content' => $post->getContent(),
             'post_image' => $post->getImage(),
-            'id_previous' => $id_previous ,
-            'id_next' => $id_next
+            'slug_previous' => $slug_previous,
+            'slug_next' => $slug_next
         ]);
     }
 

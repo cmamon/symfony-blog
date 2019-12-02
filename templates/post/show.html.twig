@@ -8,8 +8,6 @@
 {% block body %}
   <section class="section">
     <div class="container">
-      <h1 class="title">Post {{ id }}</h1>
-
       <div class="tile is-ancestor">
         <div class="tile is-parent">
           <div class="tile is-child box">
@@ -29,7 +27,7 @@
       <div class="field is-grouped">
         <p class="control">
 
-          <a class="button is-dark " {%if id_previous != null %} href="{{ path('post_show', {'id': id_previous}) }}" {% else %} style="visibility: hidden;"{% endif %} >
+          <a class="button is-dark " {%if slug_previous != null %} href="{{ path('post_show', {'slug': slug_previous}) }}" {% else %} style="visibility: hidden;"{% endif %} >
             Previous
           </a>
 
@@ -37,7 +35,7 @@
             Back
           </a>
 
-          <a class="button is-dark " {%if id_next != null %} href="{{ path('post_show', {'id': id_next}) }}"{% else %} style="visibility: hidden;"{% endif %} >
+          <a class="button is-dark " {%if slug_next != null %} href="{{ path('post_show', {'slug': slug_next}) }}"{% else %} style="visibility: hidden;"{% endif %} >
             Next
           </a>
 
