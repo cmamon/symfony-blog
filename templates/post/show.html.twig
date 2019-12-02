@@ -6,6 +6,18 @@
 {% block title %}Blog{% endblock %}
 
 {% block body %}
+  <script>
+  function switchVisiblity() {
+    var isVisible = document.getElementById("commentForm").style.display == "block";
+
+    if(isVisible){
+      document.getElementById("commentForm").style.display = "none";
+    }else{
+      document.getElementById("commentForm").style.display = "block";
+    }
+  }
+  </script>
+  {{ form_start(form)  }}
   <section class="section">
     <div class="container">
       <h1 class="title">Post {{ id }}</h1>
@@ -17,11 +29,53 @@
             <figure class="image" style="margin-left: auto;margin-right: auto;">
               <img src="{{ asset('files/images/' ~ post_image) }}"><br>
             </figure>
-            <ul>
-                <li>Slug : {{post_slug}}</li>
-                <li>Publication date : {{post_pub_date}} </li>
-                <li>Content : {{post_content}}</li>
-            </ul>
+            <div>
+              <p>{{post_content}}</p>
+              <p align="right">{{post_pub_date}}</p>
+            </div>
+            {% for comment in comments %}
+            <br>
+              <div class="card">
+                <div class="card-content">
+                  <div class="media">
+                    <div class="media-left">
+                      <figure class="image is-48x48">
+                        <img src="https://st2.depositphotos.com/1007566/11574/v/950/depositphotos_115748074-stock-illustration-executive-businessman-profile-isolated-icon.jpg" alt="Placeholder image">
+                      </figure>
+                    </div>
+                    <div class="media-content">
+                      <p class="title is-4">John Smith</p>
+                    </div>
+                  </div>
+
+                  <div class="content" >
+                    <p style="word-break: break-all;width:70%;text-align: justify;text-justify: inter-word;">
+                      {{ comment.message }}
+                    </p>
+                    <br>
+                    <div align="right">{{ comment.publicationDate.format('H:i:s \o\n l jS F Y')  }}</div>
+                  </div>
+                </div>
+              </div>
+
+            {% endfor %}
+
+            <br>
+
+            <button class="field is-grouped control button is-dark" onclick="switchVisiblity()">Comment</button>
+
+            <div id="commentForm" style="display:none;">
+              <div class="field">
+                <label class="label">My comment</label>
+                <div class="control" >
+                    {{ form_widget(form.message, { 'attr': {'class': 'textarea'} }) }}
+                </div>
+              </div>
+              <br>
+              <div class="control">
+                {{ form_row(form.submit, { 'label': 'Submit me', 'attr': {'class': 'button is-link'}}) }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -29,7 +83,7 @@
       <div class="field is-grouped">
         <p class="control">
 
-          <a class="button is-dark " {%if id_previous != null %} href="{{ path('post_show', {'id': id_previous}) }}" {% else %} style="visibility: hidden;"{% endif %} >
+          <a class="button is-dark " {% if id_previous != null %} href="{{ path('post_show', {'id': id_previous}) }}" {% else %} style="visibility: hidden;"{% endif %} >
             Previous
           </a>
 
@@ -47,4 +101,5 @@
 
     </div>
   </section>
+  {{ form_end(form)  }}
 {% endblock %}
