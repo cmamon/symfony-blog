@@ -10,73 +10,74 @@
   </section>
 
   <section class="section">
-    <div class="container">
-
-      <div class="field is-grouped">
-        <p class="control">
-          <a class="button is-dark" href="{{ path('post_create') }}">
-            Write a post >>
-          </a>
-        </p>
-      </div>
-
-      {% for post in posts %}
-        <article
-          class="message
-          {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
-          or (( not posts[0].isPinned() ) and loop.index0 == 0)
-          or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
-          is_lastness
-          {% endif %}
-      ">
-
-          <div class="message-header
-          {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
-          or (( not posts[0].isPinned() ) and loop.index0 == 0)
-          or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
-          is_lastness
-          {% endif %}">
-
-            <p>{{ post.name }}</p>
-            <span>
-              <a style="padding-right: 15px" href="{{ path('post_pinned', {'id': post.id}) }}">
-                {% if post.isPinned() %}
-                  <i class="fas fa-lock"></i>
-                {% else %}
-                  <i class="fas fa-lock-open"></i>
-                {% endif %}
+    <div class="columns is-mobile">
+      <div class="column is-three-fifths is-offset-one-fifth">
+          <div class="field is-grouped">
+            <p class="control">
+              <a class="button is-dark" href="{{ path('post_create') }}">
+                Write a post >>
               </a>
-              <a style="padding-right: 15px" href="{{ path('post_edit', {'id': post.id}) }}">
-                <i class="fas fa-edit"></i>
-              </a>
-              <a href="{{ path('post_delete', {'id': post.id}) }}">
-                <i class="far fa-times-circle"></i>
-              </a>
-            </span>
+            </p>
           </div>
-          <div class="message-body">
-            <figure class="image" style="margin-left: auto;margin-right: auto;">
-              <img src="{{ asset('files/images/' ~ post.image) }}"><br>
-            </figure>
-            <em>{{ post.publicationDate.format('H:i:s \o\n l jS F Y') }}
-            </em><br>
-            {{ post.content }}
-            <br><br>
-            <div class="field is-grouped">
-              <p class="control">
-                <a class="button is-dark
-                {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
-                or (( not posts[0].isPinned() ) and loop.index0 == 0)
-                or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
-                is_lastness
-                {% endif %}" href="{{ path('post_show', {'slug': post.slug}) }}">
-                  View article >>
-                </a>
-              </p>
-            </div>
-          </div>
-        </article>
-      {% endfor %}
+
+          {% for post in posts %}
+            <article
+              class="message
+              {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+              or (( not posts[0].isPinned() ) and loop.index0 == 0)
+              or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
+              is_lastness
+              {% endif %}
+          ">
+
+              <div class="message-header
+              {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+              or (( not posts[0].isPinned() ) and loop.index0 == 0)
+              or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
+              is_lastness
+              {% endif %}">
+
+                <p>{{ post.name }}</p>
+                <span>
+                  <a style="padding-right: 15px" href="{{ path('post_pinned', {'id': post.id}) }}">
+                    {% if post.isPinned() %}
+                      <i class="fas fa-lock"></i>
+                    {% else %}
+                      <i class="fas fa-lock-open"></i>
+                    {% endif %}
+                  </a>
+                  <a style="padding-right: 15px" href="{{ path('post_edit', {'id': post.id}) }}">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a href="{{ path('post_delete', {'id': post.id}) }}">
+                    <i class="far fa-times-circle"></i>
+                  </a>
+                </span>
+              </div>
+              <div class="message-body">
+                <figure class="image" style="margin-left: auto;margin-right: auto;">
+                  <img src="{{ asset('files/images/' ~ post.image) }}"><br>
+                </figure>
+                <em>{{ post.publicationDate.format('H:i:s \o\n l jS F Y') }}
+                </em><br>
+                {{ post.content }}
+                <br><br>
+                <div class="field is-grouped">
+                  <p class="control">
+                    <a class="button is-dark
+                    {% if (post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
+                    or (( not posts[0].isPinned() ) and loop.index0 == 0)
+                    or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
+                    is_lastness
+                    {% endif %}" href="{{ path('post_show', {'slug': post.slug}) }}">
+                      View article >>
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
     </div>
   </section>
 {% endblock %}

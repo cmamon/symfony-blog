@@ -2,47 +2,47 @@
 
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Blog{% endblock %}
 
 {% block body %}
-  <section class="section">
-    <div class="container">
-      <div class="tile is-ancestor">
-        <div class="tile is-parent">
-          <div class="tile is-child box">
-            <p class="title">{{post_name}}</p>
-            <figure class="image" style="margin-left: auto;margin-right: auto;">
-              <img src="{{ asset('files/images/' ~ post_image) }}"><br>
-            </figure>
-            <ul>
-                <li>Slug : {{post_slug}}</li>
-                <li>Publication date : {{post_pub_date}} </li>
-                <li>Content : {{post_content}}</li>
-            </ul>
+<section class="section content">
+  <div class="columns is-mobile">
+      <div class="column is-three-fifths is-offset-one-fifth"
+        <div class="tile is-ancestor">
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <p class="title">{{post_name}}</p>
+              <figure class="image" style="margin-left: auto;margin-right: auto;">
+                <img src="{{ asset('files/images/' ~ post_image) }}"><br>
+              </figure>
+              <ul>
+                  <li>Slug : {{post_slug}}</li>
+                  <li>Publication date : {{post_pub_date}} </li>
+                  <li>Content : {{post_content}}</li>
+              </ul>
+            </div>
           </div>
         </div>
+        <div class="field is-grouped">
+          <p class="control">
+            <a class="button is-dark" {%if slug_previous != null %}
+              href="{{ path('post_show', {'slug': slug_previous}) }}"
+              {% else %} style="visibility: hidden;"{% endif %}
+            >
+              Previous
+            </a>
+            <a class="button is-dark" href="{{ path('index') }}">
+              Back
+            </a>
+            <a class="button is-dark" {%if slug_next != null %}
+              href="{{ path('post_show', {'slug': slug_next}) }}"
+              {% else %} style="visibility: hidden;"{% endif %}
+            >
+              Next
+            </a>
+          </p>
       </div>
-
-      <div class="field is-grouped">
-        <p class="control">
-
-          <a class="button is-dark " {%if slug_previous != null %} href="{{ path('post_show', {'slug': slug_previous}) }}" {% else %} style="visibility: hidden;"{% endif %} >
-            Previous
-          </a>
-
-          <a class="button is-dark" href="{{ path('index') }}">
-            Back
-          </a>
-
-          <a class="button is-dark " {%if slug_next != null %} href="{{ path('post_show', {'slug': slug_next}) }}"{% else %} style="visibility: hidden;"{% endif %} >
-            Next
-          </a>
-
-        </p>
-      </div>
-
-
     </div>
-  </section>
+  </div>
+</section>
 {% endblock %}
