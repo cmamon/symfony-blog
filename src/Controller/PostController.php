@@ -220,7 +220,7 @@ class PostController extends AbstractController
     /**
      * @Route("/post/{slug}", name="post_show")
      */
-    public function showPost($id, Request $request): Response
+    public function showPost($slug, Request $request): Response
     {
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
@@ -264,7 +264,7 @@ class PostController extends AbstractController
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_show', ['id' => $id]);
+            return $this->redirectToRoute('post_show', ['post_slug' => $post->getSlug()]);
         }
 
         $repository = $this->getDoctrine()->getRepository(Comment::class);
