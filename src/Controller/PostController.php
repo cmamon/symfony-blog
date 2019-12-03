@@ -5,7 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\Type\PostFormType;
-use App\Entity\Comment;
+use App\Entity\Remark;
 use App\Utils\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Gedmo\Sluggable\Util\Urlizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use App\Repository\CommentRepository;
+use App\Repository\RemarkRepository;
 
 /**
  * Controller for posts.
@@ -108,6 +108,9 @@ class PostController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
+
+            $entityManager->persist($remark);
+
             try {
                 $entityManager->flush();
             } catch (UniqueConstraintViolationException $e) {
@@ -246,31 +249,31 @@ class PostController extends AbstractController
             }
         }
 
-        $comment = new Comment();
+        $remark = new Remark();
 
-        $form = $this->createFormBuilder($comment)
+        $form = $this->createFormBuilder($remark)
             ->add('message', TextareaType::class)
             ->add('submit', SubmitType::class)
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setPostId($id);
-            $comment->setUser(100);
-            $comment->setPublicationDate(new \DateTime());
-            $comment->setMessage($form['message']->getData());
+            $remark->setPostID($id);
+            $remark->setUserID(100);
+            $remark->setPublicationDate(new \DateTime());
+            $remark->setMessage($form['message']->getData());
 
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
+            $entityManager->persist($remark);
             $entityManager->flush();
 
             return $this->redirectToRoute('post_show', ['slug' => $slug]);
         }
 
-        $repository = $this->getDoctrine()->getRepository(Comment::class);
+        $repository = $this->getDoctrine()->getRepository(Remark::class);
 
-        $comments = $repository->findBy(
-            array('postId' => $id),
+        $remarks = $repository->findBy(
+            array('postID' => $id),
             array('publicationDate' => 'DESC')
         );
 
@@ -282,7 +285,7 @@ class PostController extends AbstractController
             'post_content' => $post->getContent(),
             'post_image' => $post->getImage(),
             'form' => $form->createView(),
-            'comments' => $comments,
+            'remarks' => $remarks,
             'slug_previous' => $slug_previous,
             'slug_next' => $slug_next
         ]);
