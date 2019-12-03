@@ -74,7 +74,7 @@
                     or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
                     is_lastness
                     {% endif %}"
-                    href="{{ path('post_show', {'id': post.slug}) }}">
+                    href="{{ path('post_show', {'slug': post.slug}) }}">
                     View article >>
                   </a>
                 </p>
