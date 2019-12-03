@@ -109,8 +109,6 @@ class PostController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
 
-            $entityManager->persist($remark);
-
             try {
                 $entityManager->flush();
             } catch (UniqueConstraintViolationException $e) {
