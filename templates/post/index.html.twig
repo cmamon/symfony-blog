@@ -66,8 +66,7 @@
               <br><br>
               <div class="field is-grouped">
                 <p class="control">
-                  <a
-                    class="button is-dark
+                  <a class="button is-dark
                     {% if (loop.length == 1)
                     or (loop.length > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
                     or (( not posts[0].isPinned() ) and loop.index0 == 0)
@@ -84,6 +83,5 @@
         {% endfor %}
       </div>
     </div>
-  </div>
   </section>
 {% endblock %}

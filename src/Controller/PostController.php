@@ -314,5 +314,42 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('index');
     }
+
+    /**
+     * @Route("/remark/delete/{id}", name="remark_delete")
+     */
+    public function deleteRemark($id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $remark = $this->getDoctrine()
+            ->getRepository(Remark::class)
+            ->find($id);
+
+        $post = $this->getDoctrine()
+            ->getRepository(Post::class)
+            ->find($remark->getPostID());
+
+        if (!$remark) {
+            throw $this->createNotFoundException(
+                'No post found for id '.$id
+            );
+        }
+
+        $entityManager->remove($remark);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('post_show', [
+            'slug' => $post->getSlug(),
+        ]);
+    }
+
+    /**
+     * @Route("/remark/delete/{id}", name="remark_delete")
+     */
+    public function editRemark($id): Response
+    {
+        return new Response('T0D0 editRemark');
+    }
 }
 //

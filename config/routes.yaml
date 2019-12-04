@@ -30,3 +30,11 @@ post_edit:
 post_pinned:
     path : /post/pin/{id}
     controller: App\Controller\PostController::pinPost
+
+remark_delete:
+    path : /remark/delete/{id}
+    controller: App\Controller\PostController::deleteRemark
+
+remark_edit:
+    path : /remark/edit/{id}
+    controller: App\Controller\PostController::editRemark

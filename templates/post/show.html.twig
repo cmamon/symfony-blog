@@ -34,7 +34,8 @@
             </div>
             {% for remark in remarks %}
             <br>
-              <div class="card">
+              <div class="card" >
+
                 <div class="card-content">
                   <div class="media">
                     <div class="media-left">
@@ -43,7 +44,16 @@
                       </figure>
                     </div>
                     <div class="media-content">
-                      <p class="title is-4">John Smith</p>
+                        <p class="title is-4" style="float: left;">John Smith</p>
+                        <span style="float: right;">
+                            <a style="padding-right: 15px" href="{{ path('remark_edit', {'id':remark.id}) }}">
+                              <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{ path('remark_delete', {'id': remark.id}) }}">
+                              <i class="far fa-times-circle"></i>
+                            </a>
+                        </span>
+
                     </div>
                   </div>
 
