@@ -1,29 +1,35 @@
 {# templates/header.html.twig #}
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="{{ url('index') }}">
-        Blog
-    </a>
+    <div class="navbar-brand">
+        <a class="navbar-item" href="{{ url('index') }}">
+            Blog
+        </a>
 
-    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBlog">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  <div id="navbarBlog" class="navbar-menu">
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-primary" href="{{ path('register') }}">
-            <strong>Sign up</strong>
-          </a>
-          <a class="button is-light">
-            Log in
-          </a>
-        </div>
-      </div>
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBlog">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
     </div>
-  </div>
+
+    <div id="navbarBlog" class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div class="buttons">
+                    {% if app.user %}
+                    <a class="button is-primary" href="{{ path('logout') }}">
+                        <strong>Log out</strong>
+                    </a>
+                    {% elseif not app.user %}
+                    <a class="button is-primary" href="{{ path('register') }}">
+                        <strong>Sign up</strong>
+                    </a>
+                    <a class="button is-light" href="{{ path('login') }}">
+                        Log in
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </nav>
