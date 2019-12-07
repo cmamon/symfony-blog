@@ -22,7 +22,7 @@ class PostFormType extends AbstractType
         ->add('content', TextareaType::class)
         ->add('submit', SubmitType::class)
         ->add('image', FileType::class, [
-                'label' => 'Choose a file..',
+                'label' => 'Choose a file…',
                 'mapped' => false,
                 'required' => false,
             ])
