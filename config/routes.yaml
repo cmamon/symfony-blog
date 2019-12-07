@@ -8,7 +8,7 @@ login:
 
 logout:
     path: /logout
-    
+
 register:
     path : /register
 
@@ -38,8 +38,8 @@ post_pinned:
 
 remark_delete:
     path : /remark/delete/{id}
-    controller: App\Controller\PostController::deleteRemark
+    controller: App\Controller\RemarkController::deleteRemark
 
 remark_edit:
     path : /remark/edit/{id}
-    controller: App\Controller\PostController::editRemark
+    controller: App\Controller\RemarkController::editRemark

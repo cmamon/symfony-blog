@@ -4,23 +4,23 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Form\Type\PostFormType;
 use App\Entity\Remark;
+use App\Form\Type\PostFormType;
 use App\Utils\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Gedmo\Sluggable\Util\Urlizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Repository\RemarkRepository;
@@ -271,8 +271,8 @@ class PostController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Remark::class);
 
         $remarks = $repository->findBy(
-            array('postID' => $id),
-            array('publicationDate' => 'DESC')
+            ['postID' => $id],
+            ['publicationDate' => 'DESC'],
         );
 
         return $this->render('post/show.html.twig', [
@@ -314,42 +314,4 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('index');
     }
-
-    /**
-     * @Route("/remark/delete/{id}", name="remark_delete")
-     */
-    public function deleteRemark($id): Response
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $remark = $this->getDoctrine()
-            ->getRepository(Remark::class)
-            ->find($id);
-
-        $post = $this->getDoctrine()
-            ->getRepository(Post::class)
-            ->find($remark->getPostID());
-
-        if (!$remark) {
-            throw $this->createNotFoundException(
-                'No post found for id '.$id
-            );
-        }
-
-        $entityManager->remove($remark);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('post_show', [
-            'slug' => $post->getSlug(),
-        ]);
-    }
-
-    /**
-     * @Route("/remark/delete/{id}", name="remark_delete")
-     */
-    public function editRemark($id): Response
-    {
-        return new Response('T0D0 editRemark');
-    }
 }
-//
