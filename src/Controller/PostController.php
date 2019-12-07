@@ -279,7 +279,7 @@ class PostController extends AbstractController
             'id' => $id,
             'post_name' => $post->getName(),
             'post_slug' => $post->getSlug(),
-            'post_pub_date' => $post->getPublicationDate()->format('H:i:s \o\n l jS F Y'),
+            'post_pub_date' => $post->getPublicationDate()->format('l jS F Y \a\t H:i'),
             'post_content' => $post->getContent(),
             'post_image' => $post->getImage(),
             'form' => $form->createView(),
