@@ -25,7 +25,7 @@ class PostFormType extends AbstractType
             ])
             ->add('submit', SubmitType::class)
             ->add('image', FileType::class, [
-                'label' => 'Choose a file…',
+                'label' => 'Choose an image…',
                 'mapped' => false,
                 'required' => false,
             ])

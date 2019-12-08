@@ -170,12 +170,12 @@ class PostController extends AbstractController
         $form = $this->createFormBuilder($post)
             ->add('name', TextType::class, ['data' => $post->getName()])
             ->add('content', CKEditorType::class, ['data' => $post->getContent()])
-            ->add('submit', SubmitType::class)
             ->add('image', FileType::class, [
-                'label' => 'Choose a file..',
+                'label' => 'Choose a new image…',
                 'mapped' => false,
                 'required' => false,
             ])
+            ->add('submit', SubmitType::class)
             ->getForm();
 
         $form->handleRequest($request);
