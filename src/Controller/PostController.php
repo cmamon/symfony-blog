@@ -6,10 +6,13 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\Remark;
 use App\Form\Type\PostFormType;
+use App\Repository\RemarkRepository;
 use App\Utils\Slugger;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Gedmo\Sluggable\Util\Urlizer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -21,9 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Gedmo\Sluggable\Util\Urlizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use App\Repository\RemarkRepository;
 
 /**
  * Controller for posts.
@@ -168,7 +169,7 @@ class PostController extends AbstractController
 
         $form = $this->createFormBuilder($post)
             ->add('name', TextType::class, ['data' => $post->getName()])
-            ->add('content', TextareaType::class, ['data' => $post->getContent()])
+            ->add('content', CKEditorType::class, ['data' => $post->getContent()])
             ->add('submit', SubmitType::class)
             ->add('image', FileType::class, [
                 'label' => 'Choose a file..',
