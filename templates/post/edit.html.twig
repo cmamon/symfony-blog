@@ -7,54 +7,78 @@
 
 {% block body %}
 
-<h1 class="title">Update post</h1>
+<div class="content">
+    <h1 class="title">Update post</h1>
 
-{{ form_start(form)  }}
-<section class="form">
+    <section class="form">
+        {{ form_start(form) }}
+        <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+                {{ form_widget(form.name, { 'attr': {'class': 'input'} }) }}
+            </div>
+        </div>
 
-  <div class="field">
-    <label class="label">Title</label>
-    <div class="control">
-        {{ form_widget(form.name, { 'attr': {'class': 'input'} }) }}
-    </div>
-  </div>
+        <div class="field">
+            <label class="label">Message</label>
+            <div class="control ">
+                {{ form_widget(form.content) }}
+            </div>
+        </div>
 
-  <div class="field">
-    <label class="label">Message</label>
-    <div class="control ">
-        {{ form_widget(form.content, { 'attr': {'class': 'textarea'} }) }}
-    </div>
-  </div>
+        <div class="field">
+            <label class="label">Current image : </label>
+            {% if post_image %}
+            <figure class="image" style="margin-left: auto;margin-right: auto;">
+                <img src="{{ asset('files/images/' ~ post_image) }}"><br>
+            </figure>
+            {% else %}
+            <figure class="image is-3by1">
+                <img src="https://bulma.io/images/placeholders/720x240.png" alt="">
+            </figure>
+            {% endif %}
+        </div>
+        <br>
 
-  <div class="field is-grouped">
-    <div class="control">
-      {{ form_row(form.submit, { 'label': 'Update', 'attr': {'class': 'button is-link'}}) }}
-    </div>
-    <div class="control">
-      <a class="button is-link is-light" href="{{ path('index') }}">
-        Cancel
-      </a>
-    </div>
-  </div>
+        <div class="field">
+            <div id="post-image" class="file has-name is-fullwidth">
+                <label class="file-label">
+                    {{ form_widget(form.image, { 'attr': {'class': 'file-input'} }) }}
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        {{ form_label(form.image,form.image ,{ 'label_attr': {'class': 'file-label'} }) }}
+                    </span>
+                    <span class="file-name">
+                        No file uploaded
+                    </span>
+                </label>
+            </div>
+        </div>
 
-  <div class="file has-name is-right">
-  <label class="file-label">
-    {{ form_widget(form.image, { 'attr': {'class': 'file-input'} }) }}
-
-    <span class="file-cta">
-      <span class="file-icon">
-        <i class="fas fa-upload"></i>
-      </span>
-      {{ form_label(form.image,form.image ,{ 'label_attr': {'class': 'file-label'} }) }}
-    </span>
-
-  </label>
+        <div class="field is-grouped">
+            <div class="control">
+                {{ form_row(form.submit, { 'label': 'Update', 'attr': {'class': 'button is-link'}}) }}
+            </div>
+            <div class="control">
+                <a class="button is-link is-light" href="{{ path('index') }}">
+                    Cancel
+                </a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </section>
 </div>
-<br>
-<figure class="image" style="margin-left: auto;margin-right: auto;">
-  <img src="{{ asset('files/images/' ~ post_image) }}"><br>
-</figure>
-</section>
-{{ form_end(form) }}
+
+<script>
+const fileInput = document.querySelector('#post-image input[type=file]');
+fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+        const fileName = document.querySelector('#post-image .file-name');
+        fileName.textContent = fileInput.files[0].name;
+    }
+}
+</script>
 
 {% endblock %}
