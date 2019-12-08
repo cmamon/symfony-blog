@@ -3,6 +3,7 @@
 namespace App\Form\Type;
 
 use App\Entity\Post;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -18,10 +19,12 @@ class PostFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('name', TextType::class)
-        ->add('content', TextareaType::class)
-        ->add('submit', SubmitType::class)
-        ->add('image', FileType::class, [
+            ->add('name', TextType::class)
+            ->add('content', CKEditorType::class, [
+                'attr' => ['class' => 'ckeditor'],
+            ])
+            ->add('submit', SubmitType::class)
+            ->add('image', FileType::class, [
                 'label' => 'Choose a file…',
                 'mapped' => false,
                 'required' => false,
