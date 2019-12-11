@@ -3,10 +3,12 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Post;
 use App\Entity\Remark;
 use App\Form\Type\PostFormType;
 use App\Repository\RemarkRepository;
+use App\Repository\UserRepository;
 use App\Utils\Slugger;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -224,6 +226,8 @@ class PostController extends AbstractController
      */
     public function showPost($slug, Request $request): Response
     {
+        $idUser = $this->getUser()->getId();
+
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
             ->findOneBy(['slug' => $slug]);
@@ -238,6 +242,10 @@ class PostController extends AbstractController
 
         $posts = $this->getDoctrine()
             ->getRepository(Post::class)
+            ->findAll();
+
+        $users = $this->getDoctrine()
+            ->getRepository(User::class)
             ->findAll();
 
         foreach ($posts as $key => $post) {
@@ -258,7 +266,7 @@ class PostController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $remark->setPostID($id);
-            $remark->setUserID(100);
+            $remark->setUserID($idUser);
             $remark->setPublicationDate(new \DateTime());
             $remark->setMessage($form['message']->getData());
 
@@ -266,7 +274,7 @@ class PostController extends AbstractController
             $entityManager->persist($remark);
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_show', ['slug' => $slug]);
+            return $this->redirectToRoute('post_show', ['slug' => $slug,'idUser' => $idUser]);
         }
 
         $repository = $this->getDoctrine()->getRepository(Remark::class);
@@ -285,6 +293,7 @@ class PostController extends AbstractController
             'post_image' => $post->getImage(),
             'form' => $form->createView(),
             'remarks' => $remarks,
+            'users' => $users,
             'slug_previous' => $slug_previous,
             'slug_next' => $slug_next
         ]);

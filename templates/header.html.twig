@@ -18,11 +18,11 @@
                 <div class="buttons">
                     {% if app.user %}
                     <a class="button is-primary" href="{{ path('logout') }}">
-                        <strong>Log out</strong>
+                        <strong>Log out {{app.user.username}} </strong>
                     </a>
                     {% elseif not app.user %}
                     <a class="button is-primary" href="{{ path('register') }}">
-                        <strong>Sign up</strong>
+                        <strong>Sign up </strong>
                     </a>
                     <a class="button is-light" href="{{ path('login') }}">
                         Log in

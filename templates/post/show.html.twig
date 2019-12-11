@@ -37,7 +37,7 @@
                                     </figure>
                                 </div>
                                 <div class="media-content">
-                                    <p class="title is-4" style="float: left;">John Smith</p>
+                                    <p class="title is-4" style="float: left;">{{users[remark.userID-1].username}}</p>
                                     <span style="float: right;">
                                         <a style="padding-right: 15px" href="{{ path('remark_edit', {'id':remark.id}) }}">
                                             <i class="fas fa-edit"></i>
@@ -84,7 +84,7 @@
             <div class="field is-grouped">
                 <p class="control">
                     <a class="button is-dark" {%if slug_previous != null %}
-                    href="{{ path('post_show', {'slug': slug_previous}) }}"
+                    href="{{ path('post_show', {'slug': slug_previous,'idUser': app.user.id}) }}"
                     {% else %} style="visibility: hidden;"{% endif %}
                     >
                         Previous
@@ -93,7 +93,7 @@
                         Back
                     </a>
                     <a class="button is-dark" {%if slug_next != null %}
-                    href="{{ path('post_show', {'slug': slug_next}) }}"
+                    href="{{ path('post_show', {'slug': slug_next,'idUser': app.user.id}) }}"
                     {% else %} style="visibility: hidden;"{% endif %}
                     >
                         Next
