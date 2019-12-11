@@ -226,7 +226,11 @@ class PostController extends AbstractController
      */
     public function showPost($slug, Request $request): Response
     {
-        $idUser = $this->getUser()->getId();
+        $user=$this->getUser();
+
+        if ($user != null) {
+            $idUser = $user->getId();
+        }
 
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
@@ -274,7 +278,7 @@ class PostController extends AbstractController
             $entityManager->persist($remark);
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_show', ['slug' => $slug,'idUser' => $idUser]);
+            return $this->redirectToRoute('post_show', ['slug' => $slug]);
         }
 
         $repository = $this->getDoctrine()->getRepository(Remark::class);

@@ -61,17 +61,19 @@
 
                     <br>
 
-                    <button class="field is-grouped control button is-dark" onclick="switchVisiblity()">remark</button>
+                    {% if app.user %}
+                    <button class="field is-grouped control button is-dark" onclick="switchVisiblity()">Add remark</button>
+                    {% endif %}
 
                     <div id="remarkForm" style="display:none;">
                         {{ form_start(form)  }}
-
                         <div class="field">
                             <label class="label">My remark</label>
                             <div class="control" >
                                 {{ form_widget(form.message, { 'attr': {'class': 'textarea'} }) }}
                             </div>
                         </div>
+
                         <br>
                         <div class="control">
                             {{ form_row(form.submit, { 'label': 'Submit me', 'attr': {'class': 'button is-link'}}) }}
