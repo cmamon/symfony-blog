@@ -33,42 +33,40 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class PostController extends AbstractController
 {
-    /**
-     * @Route("/", name="index")
-     */
-    public function index()
-    {
-        $posts = $this->getDoctrine()
-        ->getRepository(Post::class)
-        ->findAll();
 
-        return $this->render('post/index.html.twig', [
-            'posts' => $posts,
-        ]);
+  /**
+   * @Route("/", name="default")
+   */
+    public function homepage()
+    {
+        $user=$this->getUser();
+
+        if ($user) {
+            return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
+        }
+        return new Response('T0D0 Homepage');
     }
 
     /**
-     * @Route("/post/delete", name="post_delete_all")
+     * @Route("/{username}", name="index")
      */
-    public function deleteAllPost()
+    public function index($username)
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getDoctrine()
+        ->getRepository(User::class)
+        ->findOneBy(['username' => $username]);
 
-        $posts = $this->getDoctrine()
-        ->getRepository(Post::class)
-        ->findAll();
+        if ($user) {
+            $posts = $this->getDoctrine()
+            ->getRepository(Post::class)
+            ->findPosts($user->getId());
 
-        if (!$posts) {
-            return new Response('No post to delete');
+            return $this->render('post/index.html.twig', [
+              'posts' => $posts,
+          ]);
         }
 
-        foreach ($posts as $key => $post) {
-            $entityManager->remove($post);
-        }
-
-        $entityManager->flush();
-
-        return new Response('Deleted all posts');
+        return new Response('No blog found');
     }
 
     /**
@@ -87,7 +85,7 @@ class PostController extends AbstractController
             // create slug based on post name
             $slugger = new Slugger();
             $post->setSlug($slugger->slugify($post->getName()));
-
+            $post->setUserID($this->getUser()->getId());
             $post->setPublicationDate(new \DateTime());
             $image = $form['image']->getData();
 
@@ -121,7 +119,7 @@ class PostController extends AbstractController
                 ]);
             }
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
         }
 
         return $this->render('post/create.html.twig', [
@@ -153,9 +151,7 @@ class PostController extends AbstractController
         ->getRepository(Post::class)
         ->findAll();
 
-        return $this->redirectToRoute('index', [
-            'posts' => $posts,
-        ]);
+        return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
     }
 
     /**
@@ -166,6 +162,10 @@ class PostController extends AbstractController
         $post = $this->getDoctrine()
             ->getRepository(Post::class)
             ->find($id);
+
+        $user = $this->getDoctrine()
+          ->getRepository(User::class)
+          ->find($post->getUserID());
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -212,12 +212,13 @@ class PostController extends AbstractController
             $entityManager->persist($post);
             $entityManager->flush();
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
         }
 
         return $this->render('post/edit.html.twig', [
             'form' => $form->createView(),
-            'post_image' => $post->getImage()
+            'post_image' => $post->getImage(),
+            'username' => $user->getUsername()
         ]);
     }
 
@@ -246,11 +247,15 @@ class PostController extends AbstractController
 
         $posts = $this->getDoctrine()
             ->getRepository(Post::class)
-            ->findAll();
+            ->findBy(array('userID' => $post->getUserID()));
 
         $users = $this->getDoctrine()
             ->getRepository(User::class)
             ->findAll();
+
+        $blogname = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($post->getUserID())->getUsername();
 
         foreach ($posts as $key => $post) {
             if ($post->getId() === $id) {
@@ -299,7 +304,8 @@ class PostController extends AbstractController
             'remarks' => $remarks,
             'users' => $users,
             'slug_previous' => $slug_previous,
-            'slug_next' => $slug_next
+            'slug_next' => $slug_next,
+            'blogname' => $blogname
         ]);
     }
 
@@ -326,6 +332,6 @@ class PostController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('index');
+        return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
     }
 }

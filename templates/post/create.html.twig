@@ -50,7 +50,7 @@
                 {{ form_row(form.submit, { 'label': 'Publish', 'attr': {'class': 'button is-link'}}) }}
             </div>
             <div class="control">
-                <a class="button is-link is-light" href="{{ path('index') }}">
+                <a class="button is-link is-light" href="{{ path('index', {'username': app.user.username}) }}">
                     Cancel
                 </a>
             </div>

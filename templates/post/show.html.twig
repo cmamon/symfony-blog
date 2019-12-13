@@ -86,16 +86,16 @@
             <div class="field is-grouped">
                 <p class="control">
                     <a class="button is-dark" {%if slug_previous != null %}
-                    href="{{ path('post_show', {'slug': slug_previous,'idUser': app.user.id}) }}"
+                    href="{{ path('post_show', {'slug': slug_previous}) }}"
                     {% else %} style="visibility: hidden;"{% endif %}
                     >
                         Previous
                     </a>
-                    <a class="button is-dark" href="{{ path('index') }}">
+                    <a class="button is-dark" href="{{ path('index', {'username': blogname}) }}">
                         Back
                     </a>
                     <a class="button is-dark" {%if slug_next != null %}
-                    href="{{ path('post_show', {'slug': slug_next,'idUser': app.user.id}) }}"
+                    href="{{ path('post_show', {'slug': slug_next}) }}"
                     {% else %} style="visibility: hidden;"{% endif %}
                     >
                         Next

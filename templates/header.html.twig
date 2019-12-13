@@ -1,9 +1,11 @@
 {# templates/header.html.twig #}
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="{{ url('index') }}">
+        {% if app.user %}
+        <a class="navbar-item" href="{{ path('index', {'username': app.user.username}) }}">
             Blog
         </a>
+        {% endif %}
 
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBlog">
             <span aria-hidden="true"></span>
