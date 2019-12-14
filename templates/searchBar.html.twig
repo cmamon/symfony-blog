@@ -1,0 +1,16 @@
+{{ form_start(form,
+  {'attr':{'action': path('handleSearch')}})}}
+
+<div class="has-addons " style="display: flex;justify-content:flex-start;" >
+  <div class="control">
+    {{ form_widget(form.search,{
+      'attr' : {'class':'input','placeholder': 'Search a blog'},
+    })}}
+  </div>
+  <div class="control">
+    {{ form_row(form.submit, {
+    'attr' : {'class':'button is-info'},
+    'label': 'Search' }) }}
+  </div>
+</div>
+{{form_end(form)}}

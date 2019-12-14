@@ -335,4 +335,21 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
     }
+
+    public function searchAction(Request $request)
+    {
+        $form = $this->createFormBuilder(null)
+          ->add('search', TextType::class)
+          ->add('submit', SubmitType::class)
+          ->getForm();
+
+        return $this->render('searchBar.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    public function handleSearch(Request $request)
+    {
+        return $this->redirectToRoute('index', ['username' => $request->get('form')['search']]);
+    }
 }

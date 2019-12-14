@@ -11,6 +11,9 @@ logout:
 
 register:
     path : /register
+handleSearch:
+    path : /search
+    controller: App\Controller\PostController::handleSearch
 
 index:
     path: /{username}
