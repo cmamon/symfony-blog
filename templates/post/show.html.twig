@@ -43,6 +43,8 @@
                                         <a style="padding-right: 15px" href="{{ path('remark_edit', {'id':remark.id}) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                      {% endif %}
+                                      {% if app.user and app.user.username == blogname %}
                                         <a href="{{ path('remark_delete', {'id': remark.id}) }}">
                                             <i class="far fa-times-circle"></i>
                                         </a>
