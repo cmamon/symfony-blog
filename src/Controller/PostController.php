@@ -44,7 +44,7 @@ class PostController extends AbstractController
         if ($user) {
             return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
         }
-        
+
         return $this->redirectToRoute('login');
     }
 
@@ -253,7 +253,7 @@ class PostController extends AbstractController
 
         $users = $this->getDoctrine()
             ->getRepository(User::class)
-            ->findAll();
+            ->findBy(array(), array('id' => 'ASC'));
 
         $blogname = $this->getDoctrine()
             ->getRepository(User::class)
