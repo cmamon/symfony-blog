@@ -44,7 +44,8 @@ class PostController extends AbstractController
         if ($user) {
             return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
         }
-        return new Response('T0D0 Homepage');
+        
+        return $this->redirectToRoute('login');
     }
 
     /**
