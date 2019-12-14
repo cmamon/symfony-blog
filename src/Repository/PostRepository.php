@@ -24,6 +24,11 @@ class PostRepository extends ServiceEntityRepository
         return $this->findBy(array(), array('isPinned' => 'DESC','publicationDate' => 'DESC'));
     }
 
+    public function findPosts($userID)
+    {
+        return $this->findBy(array('userID' => $userID), array('isPinned' => 'DESC','publicationDate' => 'DESC'));
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */

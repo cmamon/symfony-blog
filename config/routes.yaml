@@ -1,7 +1,7 @@
 
-index:
+default:
     path: /
-    controller: App\Controller\PostController::index
+    controller: App\Controller\PostController::homepage
 
 login:
     path : /login
@@ -11,14 +11,17 @@ logout:
 
 register:
     path : /register
+handleSearch:
+    path : /search
+    controller: App\Controller\PostController::handleSearch
+
+index:
+    path: /{username}
+    controller: App\Controller\PostController::index
 
 post_create:
     path: /post/new
     controller: App\Controller\PostController::createPost
-
-post_delete_all:
-    path : /post/delete
-    controller: App\Controller\PostController::deleteAllPost
 
 post_show:
     path: /post/{slug}

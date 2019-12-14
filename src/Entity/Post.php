@@ -48,6 +48,11 @@ class Post
      */
     private $isPinned = false;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $userID;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -131,5 +136,17 @@ class Post
             'fields' => 'slug',
             'message' => 'This post name is already used.',
         ]));
+    }
+
+    public function getUserID(): ?int
+    {
+        return $this->userID;
+    }
+
+    public function setUserID(int $userID): self
+    {
+        $this->userID = $userID;
+
+        return $this;
     }
 }

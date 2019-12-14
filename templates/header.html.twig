@@ -1,10 +1,16 @@
 {# templates/header.html.twig #}
+
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+
     <div class="navbar-brand">
-        <a class="navbar-item" href="{{ url('index') }}">
+        <a class="navbar-item"  width="112" height="28" href="
+          {% if app.user %}
+            {{ path('index', {'username': app.user.username}) }}
+          {% else %}
+            {{ path('default') }}
+          {% endif %}">
             Blog
         </a>
-
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBlog">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -13,16 +19,24 @@
     </div>
 
     <div id="navbarBlog" class="navbar-menu">
+      <div class="navbar-start">
+          <div class="navbar-item">
+            <div class="buttons">
+                {{ render(controller('App\\Controller\\PostController::searchAction')) }}
+            </div>
+          </div>
+        </div>
+
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
                     {% if app.user %}
                     <a class="button is-primary" href="{{ path('logout') }}">
-                        <strong>Log out {{app.user.username}} </strong>
+                        <strong>Log out {{app.user.username}}</strong>
                     </a>
                     {% elseif not app.user %}
                     <a class="button is-primary" href="{{ path('register') }}">
-                        <strong>Sign up </strong>
+                        <strong>Sign up</strong>
                     </a>
                     <a class="button is-light" href="{{ path('login') }}">
                         Log in
