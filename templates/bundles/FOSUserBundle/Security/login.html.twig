@@ -3,5 +3,7 @@
 {% block title %}Login{% endblock %}
 
 {% block fos_user_content %}
+  <section class="section">
     {{ include('@FOSUser/Security/login_content.html.twig') }}
+  </section>
 {% endblock fos_user_content %}
