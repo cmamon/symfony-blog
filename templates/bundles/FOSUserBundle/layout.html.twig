@@ -10,33 +10,7 @@
     </head>
     <body>
         <header>
-            <nav class="navbar is-light" role="navigation" aria-label="main navigation">
-              <div class="navbar-brand">
-                <a class="navbar-item" href="{{ url('login') }}">
-                    Blog
-                </a>
-                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBlog">
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                </a>
-              </div>
-
-              <div id="navbarBlog" class="navbar-menu">
-                <div class="navbar-end">
-                  <div class="navbar-item">
-                    <div class="buttons">
-                      <a class="button is-primary" href="{{ path('register') }}">
-                        <strong>Sign up</strong>
-                      </a>
-                      <a class="button is-light" href="{{ path('login') }}">
-                        Log in
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </nav>
+            {% include 'header.html.twig' %}
         </header>
 
         {% if app.request.hasPreviousSession %}
@@ -54,13 +28,7 @@
             {% endblock fos_user_content %}
         </div>
         <footer class="footer">
-            <div class="content has-text-centered">
-                <p>
-                    <strong>Symfony blog</strong> by
-                    <a href="https://github.com/cmamon">Christophe QUENETTE</a> and
-                    <a href="https://github.com/stremor-03">Sullyvan TREMOR</a>.
-                </p>
-            </div>
+            {% include 'footer.html.twig' %}
         </footer>
         {% block javascripts %}{% endblock %}
     </body>
