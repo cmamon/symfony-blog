@@ -29,16 +29,30 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
+use FOS\UserBundle\Controller\SecurityController;
 
 /**
  * Controller for posts.
  */
-class PostController extends AbstractController
+class PostController extends SecurityController
 {
 
   /**
-   * @Route("/", name="default")
-   */
+     * Renders the login template with the given parameters. Overwrite this function in
+     * an extended controller to provide additional data for the login template.
+     *
+     * @param array $data
+     *
+     * @return Response
+     */
+    protected function renderLogin(array $data)
+    {
+        return $this->render('bundles/FOSUserBundle/Security/login_content.html.twig', $data);
+    }
+
+    /**
+     * @Route("/", name="default")
+     */
     public function homepage(Request $request)
     {
         $user=$this->getUser();
@@ -77,6 +91,7 @@ class PostController extends AbstractController
            'last_username' => $lastUsername,
            'error' => $error,
            'users' => $users,
+           'csrf_token' => null,
        ));
     }
 
