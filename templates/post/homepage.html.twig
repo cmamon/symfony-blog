@@ -2,24 +2,27 @@
 
 {% extends 'base.html.twig' %}
 
-
-
 {% block title %}Homepage{% endblock %}
 
 {% block body %}
 {% trans_default_domain 'FOSUserBundle' %}
 
-<section class="columns is-desktop">
+<section class="columns is-desktop " style="
+    margin: 8% 0em;
+    height: 100%;
+    ">
 
 
-  <div class="column is-two-fifths" style="text-align: center;" >
+  <div class="column is-two-fifths " style="
+    text-align: center;
+    ">
     <h1 class="title">Do you want to visit a blog ?</h1>
 
     <div style="overflow: auto;max-height: 15em;">
     {% for user in users %}
       <a
-        class="button is-rounded is-info is-fullwidth is-outlined"
-        style="margin: 0em auto 1em; "
+        class="button is-rounded is-info is-outlined"
+        style="margin: 0em auto 1em;width:50%; "
         href="{{ path('index', {'username': user.username}) }}">
           {{user.username}}
       </a>
