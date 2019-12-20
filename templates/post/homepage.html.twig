@@ -1,0 +1,80 @@
+{# templates/blog/postDetail.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+
+
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+<section class="columns is-desktop">
+
+
+  <div class="column is-two-fifths" style="text-align: center;" >
+    <h1 class="title">Do you want to visit a blog ?</h1>
+
+    <div style="overflow: auto;max-height: 15em;">
+    {% for user in users %}
+      <a
+        class="button is-rounded is-info is-fullwidth is-outlined"
+        style="margin: 0em auto 1em; "
+        href="{{ path('index', {'username': user.username}) }}">
+          {{user.username}}
+      </a>
+    {% endfor %}
+  </div>
+  </div>
+
+  <div class="column" >
+    <h1 class="title">Login</h1>
+    <form action="{{ path("fos_user_security_check") }}" method="post">
+        <div style="margin: auto auto; width:50%;">
+          <label class="label" for="username">{{ 'security.login.username'|trans }}</label>
+          <div class="field">
+            <div class="control">
+              <input class="input "
+              style="width:100%;"
+              type="text"
+              id="username"
+              name="_username"
+              value="{{ last_username }}"
+              required="required"
+              autocomplete="username"
+              />
+            </div>
+          </div>
+
+          <label class="label" for="password"> {{ 'security.login.password'|trans }} </label>
+          <div class="field">
+            <div class="control ">
+                <input class="input"
+                style="width:100%;"
+                type="password"
+                id="password"
+                name="_password"
+                required="required"
+                autocomplete="current-password"
+                />
+            </div>
+          </div>
+          <div class="field">
+              <div class="control">
+                  <label class="checkbox" for="remember_me">
+                      {{ 'security.login.remember_me'|trans }}
+                      <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                  </label>
+              </div>
+          </div>
+          <div class="field">
+              <div class="control">
+                  <input class="button is-link" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+              </div>
+          </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

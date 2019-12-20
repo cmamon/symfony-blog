@@ -27,6 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Controller for posts.
@@ -37,7 +39,7 @@ class PostController extends AbstractController
   /**
    * @Route("/", name="default")
    */
-    public function homepage()
+    public function homepage(Request $request)
     {
         $user=$this->getUser();
 
@@ -45,7 +47,37 @@ class PostController extends AbstractController
             return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
         }
 
-        return $this->redirectToRoute('login');
+        $session = $request->getSession();
+
+        $authErrorKey = Security::AUTHENTICATION_ERROR;
+        $lastUsernameKey = Security::LAST_USERNAME;
+
+        // get the error if any (works with forward and redirect -- see below)
+        if ($request->attributes->has($authErrorKey)) {
+            $error = $request->attributes->get($authErrorKey);
+        } elseif (null !== $session && $session->has($authErrorKey)) {
+            $error = $session->get($authErrorKey);
+            $session->remove($authErrorKey);
+        } else {
+            $error = null;
+        }
+
+        if (!$error instanceof AuthenticationException) {
+            $error = null; // The value does not come from the security component.
+        }
+
+        // last username entered by the user
+        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
+
+        $users = $this->getDoctrine()
+          ->getRepository(User::class)
+          ->findAll();
+
+        return $this->render('post/homepage.html.twig', array(
+           'last_username' => $lastUsername,
+           'error' => $error,
+           'users' => $users,
+       ));
     }
 
     /**
