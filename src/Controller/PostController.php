@@ -43,8 +43,8 @@ class PostController extends SecurityController
         'version' => 'latest',
         'region' => 'eu-west-3',
         'credentials' => [
-            'key'    => 'AKIAJFEUR5RVHINXS3ZA',
-            'secret' => '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'
+            'key'    => getenv('AWS_ACCESS_KEY_ID'),
+            'secret' => getenv('AWS_SECRET_ACCESS_KEY')
             ]
         ]);
 
