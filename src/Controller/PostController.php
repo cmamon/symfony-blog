@@ -56,17 +56,9 @@ class PostController extends SecurityController
         }
     }
 
-    /**
-       * Renders the login template with the given parameters. Overwrite this function in
-       * an extended controller to provide additional data for the login template.
-       *
-       * @param array $data
-       *
-       * @return Response
-       */
     protected function renderLogin(array $data)
     {
-        return $this->render('bundles/FOSUserBundle/Security/login_content.html.twig', $data);
+        return $this->render('bundles/FOSUserBundle/Security/login_content_ext.html.twig', $data);
     }
 
     /**
@@ -80,37 +72,12 @@ class PostController extends SecurityController
             return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
         }
 
-        $session = $request->getSession();
-
-        $authErrorKey = Security::AUTHENTICATION_ERROR;
-        $lastUsernameKey = Security::LAST_USERNAME;
-
-        // get the error if any (works with forward and redirect -- see below)
-        if ($request->attributes->has($authErrorKey)) {
-            $error = $request->attributes->get($authErrorKey);
-        } elseif (null !== $session && $session->has($authErrorKey)) {
-            $error = $session->get($authErrorKey);
-            $session->remove($authErrorKey);
-        } else {
-            $error = null;
-        }
-
-        if (!$error instanceof AuthenticationException) {
-            $error = null; // The value does not come from the security component.
-        }
-
-        // last username entered by the user
-        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
-
         $users = $this->getDoctrine()
           ->getRepository(User::class)
           ->findAll();
 
         return $this->render('post/homepage.html.twig', array(
-           'last_username' => $lastUsername,
-           'error' => $error,
            'users' => $users,
-           'csrf_token' => null,
        ));
     }
 
@@ -172,8 +139,6 @@ class PostController extends SecurityController
                     // handle exception if something happens during file upload
                 }
 
-                return new Response($image->guessExtension());
-
                 $result = $this->s3->putObject(array(
                     'Bucket' => 'hellototo',
                     'Key' => $newFilename,
@@ -181,7 +146,7 @@ class PostController extends SecurityController
                     'Content-Type' => 'image/jpeg',
                     'ACL' => 'public-read'
                 ));
-
+                
                 $this->s3->waitUntil('ObjectExists', array(
                     'Bucket' => 'hellototo',
                     'Key'    => $newFilename
