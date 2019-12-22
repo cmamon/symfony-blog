@@ -37,14 +37,33 @@ use FOS\UserBundle\Controller\SecurityController;
 class PostController extends SecurityController
 {
 
-  /**
-     * Renders the login template with the given parameters. Overwrite this function in
-     * an extended controller to provide additional data for the login template.
-     *
-     * @param array $data
-     *
-     * @return Response
-     */
+    public function __construct()
+    {
+        $this->s3 = new S3Client([
+        'version' => 'latest',
+        'region' => 'eu-west-3',
+        'credentials' => [
+            'key'    => 'AKIAI7CO6UZKBMJHKZLA',
+            'secret' => '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'
+            ]
+        ]);
+
+        if (!$this->s3->doesBucketExist('hellototo')) {
+            $result = $this->s3->createBucket(array(
+            'Bucket'             => 'hellototo',
+            'LocationConstraint' => 'eu-west-3',
+        ));
+        }
+    }
+
+    /**
+       * Renders the login template with the given parameters. Overwrite this function in
+       * an extended controller to provide additional data for the login template.
+       *
+       * @param array $data
+       *
+       * @return Response
+       */
     protected function renderLogin(array $data)
     {
         return $this->render('bundles/FOSUserBundle/Security/login_content.html.twig', $data);
@@ -153,7 +172,22 @@ class PostController extends SecurityController
                     // handle exception if something happens during file upload
                 }
 
-                $post->setImage($newFilename);
+                return new Response($image->guessExtension());
+                
+                $result = $this->s3->putObject(array(
+                    'Bucket' => 'hellototo',
+                    'Key' => $newFilename,
+                    'SourceFile' => $this->getParameter('images_directory')."/".$newFilename,
+                    'Content-Type' => 'image/jpeg',
+                    'ACL' => 'public-read'
+                ));
+
+                $this->s3->waitUntil('ObjectExists', array(
+                    'Bucket' => 'hellototo',
+                    'Key'    => $newFilename
+                ));
+
+                $post->setImage($result['ObjectURL']);
             }
 
             $entityManager = $this->getDoctrine()->getManager();
