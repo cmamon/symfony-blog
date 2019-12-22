@@ -58,7 +58,7 @@ class PostController extends SecurityController
 
     protected function renderLogin(array $data)
     {
-        return $this->render('bundles/FOSUserBundle/Security/login_content.html.twig', $data);
+        return $this->render('bundles/FOSUserBundle/Security/login_content_ext.html.twig', $data);
     }
 
     /**
