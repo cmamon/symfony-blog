@@ -43,8 +43,8 @@ class PostController extends SecurityController
         'version' => 'latest',
         'region' => 'eu-west-3',
         'credentials' => [
-            'key'    => 'AKIAI7CO6UZKBMJHKZLA',
-            'secret' => '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'
+            'key'    => 'AKIAJFEUR5RVHINXS3ZA',
+            'secret' => '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'
             ]
         ]);
 
