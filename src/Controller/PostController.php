@@ -30,13 +30,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use FOS\UserBundle\Controller\SecurityController;
+use Aws\S3\S3Client;
 
 /**
  * Controller for posts.
  */
 class PostController extends SecurityController
 {
-
     public function __construct()
     {
         $this->s3 = new S3Client([
@@ -173,7 +173,7 @@ class PostController extends SecurityController
                 }
 
                 return new Response($image->guessExtension());
-                
+
                 $result = $this->s3->putObject(array(
                     'Bucket' => 'hellototo',
                     'Key' => $newFilename,
