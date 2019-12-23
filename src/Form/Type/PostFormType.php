@@ -25,12 +25,12 @@ class PostFormType extends AbstractType
                 'required' => false
             ])
             ->add('content', CKEditorType::class, [
-              'constraints' => new Callback(array($this, 'validate')),
               'required' => false,
                 'attr' => ['class' => 'ckeditor'],
             ])
             ->add('submit', SubmitType::class)
             ->add('image', FileType::class, [
+              'constraints' => new Callback(array($this, 'validate')),
                 'label' => 'Choose an image…',
                 'mapped' => false,
                 'required' => false,
@@ -49,8 +49,8 @@ class PostFormType extends AbstractType
     {
         $form = $context->getRoot();
         $data = $form->getData();
-
-        if (empty($data->getContent()) && empty($data->getImage())) {
+        
+        if (empty($data->getContent()) && empty($value)) {
             $context->buildViolation('This post need at least a description or image')
             ->atPath('content')
             ->addViolation();
