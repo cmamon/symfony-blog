@@ -9,15 +9,17 @@
     <section class="form section">
         <h2 class="title">New post</h2>
         {{ form_start(form)  }}
+        {{ form_errors(form.content) }}
+        {% if error is defined %}
+        <ul>
+            <li>{{ error.message }}</li>
+        </ul>
+        {% endif %}
         <div class="field">
             <label class="label">Title</label>
             <div class="control">
                 {{ form_widget(form.name, { 'attr': {'class': 'input'} }) }}
-                {% if error is defined %}
-                <ul>
-                    <li>{{ error.message }}</li>
-                </ul>
-                {% endif %}
+
             </div>
         </div>
 
