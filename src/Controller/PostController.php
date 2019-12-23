@@ -254,7 +254,20 @@ class PostController extends SecurityController
                     // handle exception if something happens during file upload
                 }
 
-                $post->setImage($newFilename);
+                $result = $this->s3->putObject(array(
+                    'Bucket' => 'hellototo',
+                    'Key' => $newFilename,
+                    'SourceFile' => $this->getParameter('images_directory')."/".$newFilename,
+                    'Content-Type' => 'image/jpeg',
+                    'ACL' => 'public-read'
+                ));
+
+                $this->s3->waitUntil('ObjectExists', array(
+                    'Bucket' => 'hellototo',
+                    'Key'    => $newFilename
+                ));
+
+                $post->setImage($result['ObjectURL']);
             }
 
             $entityManager->persist($post);
