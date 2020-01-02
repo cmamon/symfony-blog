@@ -81,7 +81,7 @@ class PostController extends SecurityController
           ->getRepository(User::class)
           ->findAll();
 
-        return $this->render('post/homepage.html.twig', [
+        return $this->render('home/homepage.html.twig', [
            'users' => $users,
         ]);
     }

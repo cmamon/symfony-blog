@@ -14,6 +14,13 @@
     <div class="columns is-mobile">
       <div class="column is-three-fifths is-offset-one-fifth">
         {% if app.user and app.user.username == blogname %}
+
+        {% if posts is empty %}
+            <h4 class="subtitle">
+                You haven't any published post. Go ahead, write what's on your
+                mind !
+            </h4>
+        {% endif %}
         <div class="field is-grouped">
           <p class="control">
             <a class="button is-dark" href="{{ path('post_create') }}">
@@ -21,6 +28,13 @@
             </a>
           </p>
         </div>
+        {% else %}
+            {% if posts is empty %}
+                <h4 class="subtitle">
+                    {{ blogname }} hasn't published any post yet. Come back
+                    later to check if there is something new.
+                </h4>
+            {% endif %}
         {% endif %}
 
         {% for post in posts %}
@@ -68,7 +82,11 @@
                 </figure>
                 {% endif %}
                 <br>
-              {{ post.content | raw }}
+                {{
+                    post.content|raw|striptags|length > 100 ?
+                    post.content|raw|striptags|slice(0, 100) ~ ' ...' :
+                    post.content|raw
+                }}
               <br><br>
 
               <div class="buttons is-right">

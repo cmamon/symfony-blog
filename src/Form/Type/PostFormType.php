@@ -21,9 +21,7 @@ class PostFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, [
-                'required' => false
-            ])
+            ->add('name', TextType::class)
             ->add('content', CKEditorType::class, [
               'required' => false,
                 'attr' => ['class' => 'ckeditor'],
@@ -49,7 +47,7 @@ class PostFormType extends AbstractType
     {
         $form = $context->getRoot();
         $data = $form->getData();
-        
+
         if (empty($data->getContent()) && empty($value)) {
             $context->buildViolation('This post need at least a description or image')
             ->atPath('content')
