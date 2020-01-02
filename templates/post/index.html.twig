@@ -3,20 +3,21 @@
 {% block title %}Blog{% endblock %}
 
 {% block body %}
-  <section class="section">
+  <section class="section content">
     <div class="container">
-      <h1 class="title">Welcome on {{blogname}} blog !!</h1>
+        {% if app.user and app.user.username == blogname %}
+            <h2 class="title">Welcome home {{ app.user.username }}</h1>
+        {% else %}
+            <h2 class="title">Welcome on {{ blogname }} blog !</h1>
+        {% endif %}
     </div>
-  </section>
-
-  <section class="section">
     <div class="columns is-mobile">
       <div class="column is-three-fifths is-offset-one-fifth">
         {% if app.user and app.user.username == blogname %}
         <div class="field is-grouped">
           <p class="control">
             <a class="button is-dark" href="{{ path('post_create') }}">
-              Write a post >>
+                Write a post >>
             </a>
           </p>
         </div>

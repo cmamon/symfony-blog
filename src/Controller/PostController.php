@@ -40,25 +40,28 @@ class PostController extends SecurityController
     public function __construct()
     {
         $this->s3 = new S3Client([
-        'version' => 'latest',
-        'region' => 'eu-west-3',
-        'credentials' => [
-            'key'    => getenv('AWS_ACCESS_KEY_ID'),
-            'secret' => getenv('AWS_SECRET_ACCESS_KEY')
+            'version' => 'latest',
+            'region' => 'eu-west-3',
+            'credentials' => [
+                'key'    => getenv('AWS_ACCESS_KEY_ID'),
+                'secret' => getenv('AWS_SECRET_ACCESS_KEY')
             ]
         ]);
 
         if (!$this->s3->doesBucketExist('hellototo')) {
-            $result = $this->s3->createBucket(array(
-            'Bucket'             => 'hellototo',
-            'LocationConstraint' => 'eu-west-3',
-        ));
+            $result = $this->s3->createBucket([
+                'Bucket'             => 'hellototo',
+                'LocationConstraint' => 'eu-west-3',
+            ]);
         }
     }
 
     protected function renderLogin(array $data)
     {
-        return $this->render('bundles/FOSUserBundle/Security/login_content_ext.html.twig', $data);
+        return $this->render(
+            'bundles/FOSUserBundle/Security/login_content_ext.html.twig',
+             $data
+         );
     }
 
     /**
@@ -66,19 +69,21 @@ class PostController extends SecurityController
      */
     public function homepage(Request $request)
     {
-        $user=$this->getUser();
+        $user = $this->getUser();
 
         if ($user) {
-            return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
+            return $this->redirectToRoute('index', [
+                'username' => $this->getUser()->getUsername()
+            ]);
         }
 
         $users = $this->getDoctrine()
           ->getRepository(User::class)
           ->findAll();
 
-        return $this->render('post/homepage.html.twig', array(
+        return $this->render('post/homepage.html.twig', [
            'users' => $users,
-       ));
+        ]);
     }
 
     /**
@@ -88,7 +93,7 @@ class PostController extends SecurityController
     {
         $user = $this->getDoctrine()
         ->getRepository(User::class)
-        ->findOneBy(['username' => $username]);
+        ->findOneBy([ 'username' => $username ]);
 
         if ($user) {
             $posts = $this->getDoctrine()
@@ -139,18 +144,18 @@ class PostController extends SecurityController
                     // handle exception if something happens during file upload
                 }
 
-                $result = $this->s3->putObject(array(
+                $result = $this->s3->putObject([
                     'Bucket' => 'hellototo',
                     'Key' => $newFilename,
                     'SourceFile' => $this->getParameter('images_directory')."/".$newFilename,
                     'Content-Type' => 'image/jpeg',
-                    'ACL' => 'public-read'
-                ));
-                
-                $this->s3->waitUntil('ObjectExists', array(
+                    'ACL' => 'public-read',
+                ]);
+
+                $this->s3->waitUntil('ObjectExists', [
                     'Bucket' => 'hellototo',
-                    'Key'    => $newFilename
-                ));
+                    'Key'    => $newFilename,
+                ]);
 
                 $post->setImage($result['ObjectURL']);
             }
@@ -163,7 +168,9 @@ class PostController extends SecurityController
             } catch (UniqueConstraintViolationException $e) {
                 return $this->render('post/create.html.twig', [
                     'form' => $form->createView(),
-                    'error' => ['message' => 'There is already a post with this title.'],
+                    'error' => [
+                        'message' => 'There is already a post with this title.'
+                    ],
                 ]);
             }
 
@@ -254,18 +261,18 @@ class PostController extends SecurityController
                     // handle exception if something happens during file upload
                 }
 
-                $result = $this->s3->putObject(array(
+                $result = $this->s3->putObject([
                     'Bucket' => 'hellototo',
                     'Key' => $newFilename,
                     'SourceFile' => $this->getParameter('images_directory')."/".$newFilename,
                     'Content-Type' => 'image/jpeg',
-                    'ACL' => 'public-read'
-                ));
+                    'ACL' => 'public-read',
+                ]);
 
-                $this->s3->waitUntil('ObjectExists', array(
+                $this->s3->waitUntil('ObjectExists', [
                     'Bucket' => 'hellototo',
                     'Key'    => $newFilename
-                ));
+                ]);
 
                 $post->setImage($result['ObjectURL']);
             }
@@ -273,7 +280,9 @@ class PostController extends SecurityController
             $entityManager->persist($post);
             $entityManager->flush();
 
-            return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
+            return $this->redirectToRoute('index', [
+                'username' => $this->getUser()->getUsername()
+            ]);
         }
 
         return $this->render('post/edit.html.twig', [
@@ -308,11 +317,11 @@ class PostController extends SecurityController
 
         $posts = $this->getDoctrine()
             ->getRepository(Post::class)
-            ->findBy(array('userID' => $post->getUserID()));
+            ->findBy(['userID' => $post->getUserID()]);
 
         $users = $this->getDoctrine()
             ->getRepository(User::class)
-            ->findBy(array(), array('id' => 'ASC'));
+            ->findBy([], ['id' => 'ASC']);
 
         $blogname = $this->getDoctrine()
             ->getRepository(User::class)
@@ -393,7 +402,9 @@ class PostController extends SecurityController
 
         $entityManager->flush();
 
-        return $this->redirectToRoute('index', ['username' => $this->getUser()->getUsername()]);
+        return $this->redirectToRoute('index', [
+            'username' => $this->getUser()->getUsername()
+        ]);
     }
 
     public function searchAction(Request $request)
@@ -403,13 +414,15 @@ class PostController extends SecurityController
           ->add('submit', SubmitType::class)
           ->getForm();
 
-        return $this->render('searchBar.html.twig', [
+        return $this->render('home/searchBar.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     public function handleSearch(Request $request)
     {
-        return $this->redirectToRoute('index', ['username' => $request->get('form')['search']]);
+        return $this->redirectToRoute('index', [
+            'username' => $request->get('form')['search']
+        ]);
     }
 }

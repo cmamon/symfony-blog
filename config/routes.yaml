@@ -1,4 +1,3 @@
-
 default:
     path: /
     controller: App\Controller\PostController::homepage
@@ -11,6 +10,7 @@ logout:
 
 register:
     path : /register
+
 handleSearch:
     path : /search
     controller: App\Controller\PostController::handleSearch
