@@ -7,6 +7,7 @@ use App\Entity\Post;
 use App\Entity\Remark;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
 * Controller for remarks.
@@ -43,7 +44,7 @@ class RemarkController extends AbstractController
     }
 
     /**
-    * @Route("/remark/delete/{id}", name="remark_delete")
+    * @Route("/remark/edit/{id}", name="remark_edit")
     */
     public function editRemark($id): Response
     {
