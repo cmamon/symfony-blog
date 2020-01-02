@@ -30,14 +30,14 @@
                     {% if app.user %}
                     <p>Logged in as <b>{{app.user.username}}</b> &nbsp;&nbsp;</p>
 
-                    <a class="button is-primary" href="{{ path('logout') }}">
-                        <b>Log out</b>
+                    <a class="grey-hover button is-primary" href="{{ path('logout') }}">
+                        Log out
                     </a>
                     {% elseif not app.user %}
-                    <a class="button is-primary" href="{{ path('register') }}">
+                    <a class="button grey-hover is-primary" href="{{ path('register') }}">
                         <strong>Sign up</strong>
                     </a>
-                    <a class="button is-light" href="{{ path('login') }}">
+                    <a class="button grey-hover" href="{{ path('login') }}">
                         Log in
                     </a>
                     {% endif %}

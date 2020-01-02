@@ -1,14 +1,14 @@
 {{ form_start(form, {'attr': {'action': path('handleSearch') }}) }}
 <div class="has-addons field">
-  <div class="control">
-    {{ form_widget(form.search,{
-      'attr' : {'class':'input','placeholder': 'Enter the name of a blog'},
-    })}}
-  </div>
-  <div class="control">
-    {{ form_row(form.submit, {
-    'attr' : {'class':'button is-info'},
-    'label': 'Search' }) }}
-  </div>
+    <div class="control">
+        {{ form_widget(form.search,{
+        'attr' : {'class':'input','placeholder': 'Enter the name of a blog'},
+        })}}
+    </div>
+    <div class="control">
+        {{ form_row(form.submit, {
+        'attr' : {'class':'button is-info'},
+        'label': 'Search' }) }}
+    </div>
 </div>
 {{form_end(form)}}

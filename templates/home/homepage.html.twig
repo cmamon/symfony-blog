@@ -17,7 +17,7 @@
                 <div style="overflow: auto;">
                     {% for user in users %}
                     <a
-                      class="button is-rounded is-info is-outlined"
+                      class="grey-hover button is-rounded is-info is-outlined is-family-code "
                       style="margin: 0em auto 1em;width:50%; "
                       href="{{ path('index', {'username': user.username}) }}">
                         {{user.username}}

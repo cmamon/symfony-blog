@@ -14,29 +14,31 @@
     <div class="columns is-mobile">
       <div class="column is-three-fifths is-offset-one-fifth">
         {% if app.user and app.user.username == blogname %}
-
-        {% if posts is empty %}
-            <h4 class="subtitle">
-                You haven't any published post. Go ahead, write what's on your
-                mind !
-            </h4>
-        {% endif %}
-        <div class="field is-grouped">
-          <p class="control">
-            <a class="button is-dark" href="{{ path('post_create') }}">
-                Write a post >>
-            </a>
-          </p>
-        </div>
+            {% if posts is empty %}
+                <p class="subtitle">
+                    You haven't any published post. Go ahead, express what's on your
+                    mind !
+                </p>
+                <br><br>
+            {% endif %}
+            <div class="field is-grouped is-grouped-centered">
+              <p class="control">
+                <a class="button is-medium grey-hover"
+                    href="{{ path('post_create') }}">
+                    Write a post
+                </a>
+              </p>
+            </div>
         {% else %}
             {% if posts is empty %}
-                <h4 class="subtitle">
+                <p class="subtitle">
                     {{ blogname }} hasn't published any post yet. Come back
                     later to check if there is something new.
-                </h4>
+                </p>
             {% endif %}
         {% endif %}
 
+        <br>
         {% for post in posts %}
           <article
             class="message
@@ -58,21 +60,28 @@
 
               <p>{{ post.name }}</p>
               {% if app.user and app.user.username == blogname %}
-              <span>
-                <a style="padding-right: 15px" href="{{ path('post_pinned', {'id': post.id}) }}">
-                  {% if post.isPinned() %}
-                    <i class="fas fa-lock"></i>
-                  {% else %}
-                    <i class="fas fa-lock-open"></i>
-                  {% endif %}
+              <p class="buttons">
+                <a class="post-action" href="{{ path('post_pinned', {'id': post.id}) }}">
+                    <span>
+                        {% if post.isPinned() %}
+                        <i class="fas fa-lock"></i>
+                        {% else %}
+                        <i class="fas fa-lock-open"></i>
+                        {% endif %}
+                    </span>
                 </a>
-                <a style="padding-right: 15px" href="{{ path('post_edit', {'id': post.id}) }}">
-                  <i class="fas fa-edit"></i>
+                &nbsp;&nbsp;&nbsp;
+                <a class="post-action" href="{{ path('post_edit', {'id': post.id}) }}">
+                    <span>
+                        <i class="fas fa-edit"></i>
+                    </span>
                 </a>
-                <a href="{{ path('post_delete', {'id': post.id}) }}">
-                  <i class="far fa-times-circle"></i>
+                &nbsp;&nbsp;
+                <a class="post-action delete"
+                    aria-label="delete"
+                    href="{{ path('post_delete', {'id': post.id}) }}">
                 </a>
-              </span>
+            </p>
               {% endif %}
             </div>
             <div class="message-body">
@@ -82,15 +91,11 @@
                 </figure>
                 {% endif %}
                 <br>
-                {{
-                    post.content|raw|striptags|length > 100 ?
-                    post.content|raw|striptags|slice(0, 100) ~ ' ...' :
-                    post.content|raw
-                }}
+                {{ post.content | raw }}
               <br><br>
 
               <div class="buttons is-right">
-                  <a class="button is-dark is-right
+                  <a class="grey-hover button is-dark is-right
                     {% if (loop.length == 1)
                     or (loop.length > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
                     or (( not posts[0].isPinned() ) and loop.index0 == 0)
@@ -98,7 +103,10 @@
                     is_lastness
                     {% endif %}"
                     href="{{ path('post_show', {'slug': post.slug}) }}">
-                    View article >>
+                    <span>View article</span>
+                    <span class="icon has-text-success">
+                        <i class="fas fa-angle-double-right"></i>
+                    </span>
                   </a>
               </div>
             </div>
