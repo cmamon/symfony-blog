@@ -40,15 +40,7 @@
 
         <br>
         {% for post in posts %}
-          <article
-            class="message
-              {% if (loop.length == 1)
-              or (loop.length > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
-              or (( not posts[0].isPinned() ) and loop.index0 == 0)
-              or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
-              is_lastness
-              {% endif %}">
-
+          <article class="message">
             <div
               class="message-header
               {% if (loop.length == 1)
@@ -62,22 +54,22 @@
               {% if app.user and app.user.username == blogname %}
               <p class="buttons">
                 <a class="post-action" href="{{ path('post_pinned', {'id': post.id}) }}">
-                    <span>
+                    <span class="is-small">
                         {% if post.isPinned() %}
-                        <i class="fas fa-lock"></i>
+                            <i class="fas fa-lock"></i>
                         {% else %}
-                        <i class="fas fa-lock-open"></i>
+                            <i class="fas fa-lock-open"></i>
                         {% endif %}
                     </span>
                 </a>
                 &nbsp;&nbsp;&nbsp;
                 <a class="post-action" href="{{ path('post_edit', {'id': post.id}) }}">
-                    <span>
+                    <span class="is-small">
                         <i class="fas fa-edit"></i>
                     </span>
                 </a>
                 &nbsp;&nbsp;
-                <a class="post-action delete"
+                <a class="delete"
                     aria-label="delete"
                     href="{{ path('post_delete', {'id': post.id}) }}">
                 </a>
@@ -95,18 +87,16 @@
               <br><br>
 
               <div class="buttons is-right">
-                  <a class="grey-hover button is-dark is-right
-                    {% if (loop.length == 1)
-                    or (loop.length > 1 and post.isPinned() and posts[0].getPublicationDate() > posts[1].getPublicationDate())
-                    or (( not posts[0].isPinned() ) and loop.index0 == 0)
-                    or (posts[0].isPinned() and posts[0].getPublicationDate() < posts[1].getPublicationDate() and loop.index0 == 1) %}
-                    is_lastness
-                    {% endif %}"
-                    href="{{ path('post_show', {'slug': post.slug}) }}">
-                    <span>View article</span>
-                    <span class="icon has-text-success">
+                  <a id="btn-view-post"
+                    class="grey-hover btn-view-post button is-dark is-right"
+                    href="{{ path('post_show', {'slug': post.slug}) }}"
+                  >
+
+                    <span class="is-family-monospace">View post </span>
+                    <span id="arrow" class="icon has-text-success">
                         <i class="fas fa-angle-double-right"></i>
                     </span>
+                    &nbsp;&nbsp;
                   </a>
               </div>
             </div>

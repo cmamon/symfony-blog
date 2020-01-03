@@ -11,6 +11,16 @@ body {
     flex-direction: column;
 }
 
+#arrow {
+    position: relative;
+    left: 0;
+    transition: left ease 0.5s;
+}
+
+a.post-action {
+    text-decoration: none;
+}
+
 .content {
     flex: 1 0 auto;
 }
@@ -24,10 +34,6 @@ body {
 
 .grey-hover:hover {
     box-shadow: 0 0 7px rgba(100, 0, 0, 0.3);
-}
-
-a.post-action {
-    text-decoration: none;
 }
 
 footer {

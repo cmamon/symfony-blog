@@ -4,11 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "css-build": "node-sass --omit-source-map-url css/sass/styles.scss css/bulma_styles.css",
+    "css-watch": "npm run css-build -- --watch",
+    "start": "npm run css-watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "bulma": "^0.8.0"
+  "dependencies": {},
+  "devDependencies": {
+    "bulma": "^0.8.0",
+    "node-sass": "^4.13.0"
   }
 }
