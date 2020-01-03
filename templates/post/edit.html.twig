@@ -22,7 +22,7 @@
         <div class="field">
             <label class="label">Description</label>
             <div class="control ">
-                {{ form_widget(form.content, { 'attr': {'class': 'textarea'}}) }}
+                {{ form_widget(form.content, { 'attr': {'class': 'textarea ckeditor'}}) }}
             </div>
         </div>
 
@@ -70,13 +70,13 @@
 </div>
 
 <script>
-const fileInput = document.querySelector('#post-image input[type=file]');
-fileInput.onchange = () => {
-    if (fileInput.files.length > 0) {
-        const fileName = document.querySelector('#post-image .file-name');
-        fileName.textContent = fileInput.files[0].name;
+    const fileInput = document.querySelector('#post-image input[type=file]');
+    fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+            const fileName = document.querySelector('#post-image .file-name');
+            fileName.textContent = fileInput.files[0].name;
+        }
     }
-}
 </script>
-
+<script src="{{ asset('js/ckeditor/ckeditor.js') }}" type="text/javascript"></script>
 {% endblock %}

@@ -12,7 +12,6 @@ use App\Repository\UserRepository;
 use App\Utils\Slugger;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -218,7 +217,10 @@ class PostController extends SecurityController
 
         $form = $this->createFormBuilder($post)
             ->add('name', TextType::class, ['data' => $post->getName()])
-            ->add('content', CKEditorType::class, ['data' => $post->getContent()])
+            ->add('content', TextareaType::class, [
+                'data' => $post->getContent(),
+                'attr' => ['class' => 'ckeditor'],
+            ])
             ->add('image', FileType::class, [
                 'label' => 'Choose a new image…',
                 'mapped' => false,
