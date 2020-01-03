@@ -6,7 +6,7 @@
 
     <div class="columns is-mobile">
         <div class="column is-one-third is-offset-one-third">
-            <h1 class="title">Login</h1>
+            <h1 class="title">Log in</h1>
             <form action="{{ path("fos_user_security_check") }}" method="post">
                 {% if csrf_token %}
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />

@@ -2,12 +2,7 @@
 
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item"  width="112" height="28" href="
-          {% if app.user %}
-            {{ path('index', {'username': app.user.username}) }}
-          {% else %}
-            {{ path('default') }}
-          {% endif %}">
+        <a class="navbar-item"  width="112" height="28" href="{{ path('default') }}">
             Blog
         </a>
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBlog">
@@ -19,9 +14,7 @@
 
     <div id="navbarBlog" class="navbar-menu">
         <div class="navbar-start">
-            <div class="navbar-item">
-                {{ render(controller('App\\Controller\\PostController::searchAction')) }}
-            </div>
+            {{ render(controller('App\\Controller\\PostController::searchAction')) }}
         </div>
 
         <div class="navbar-end">
@@ -30,6 +23,9 @@
                     {% if app.user %}
                     <p>Logged in as <b>{{app.user.username}}</b> &nbsp;&nbsp;</p>
 
+                    <a class="grey-hover button is-primary" href="{{ path('index', {'username': app.user.username}) }}">
+                        My blog
+                    </a>
                     <a class="grey-hover button is-primary" href="{{ path('logout') }}">
                         Log out
                     </a>

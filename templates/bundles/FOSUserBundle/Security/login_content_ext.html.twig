@@ -4,7 +4,7 @@
 <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 
-<h1 class="title">Login</h1>
+<h1 class="title">Log in</h1>
 <form action="{{ path("fos_user_security_check") }}" method="post">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate')  }}" />
 

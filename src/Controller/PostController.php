@@ -69,14 +69,6 @@ class PostController extends SecurityController
      */
     public function homepage(Request $request)
     {
-        $user = $this->getUser();
-
-        if ($user) {
-            return $this->redirectToRoute('index', [
-                'username' => $this->getUser()->getUsername()
-            ]);
-        }
-
         $users = $this->getDoctrine()
           ->getRepository(User::class)
           ->findAll();

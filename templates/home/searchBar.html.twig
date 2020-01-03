@@ -1,9 +1,8 @@
-{{ form_start(form, {'attr': {'action': path('handleSearch') }}) }}
+{{ form_start(form, {'attr': {'action': path('handleSearch'), 'class':'navbar-item' }}) }}
 <div class="has-addons field">
     <div class="control">
-        {{ form_widget(form.search,{
-        'attr' : {'class':'input','placeholder': 'Enter the name of a blog'},
-        })}}
+        {{ form_widget(form.search,
+        {'attr' : {'class':'input','placeholder': 'Enter the name of a blog'}}) }}
     </div>
     <div class="control">
         {{ form_row(form.submit, {
